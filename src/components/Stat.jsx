@@ -9,11 +9,17 @@ export default function Stat({
   iconActive = false,
   title = 'title',
   subtitle = 'subtitle',
+  style,
 }) {
   const iconColor = iconActive ? COLORS.brand : COLORS.primaryText;
   return (
-    <Container>
-      <MaterialIcon name={icon} size={32} color={iconColor} />
+    <Container style={style}>
+      <MaterialIcon
+        name={icon}
+        size={32}
+        color={iconColor}
+        style={styles.icon}
+      />
       <View style={styles.containerText}>
         <Text style={styles.title}>{title}</Text>
         <Text style={styles.subtitle}>{subtitle}</Text>
@@ -23,6 +29,9 @@ export default function Stat({
 }
 
 const styles = StyleSheet.create({
+  icon: {
+    marginRight: 8,
+  },
   containerText: {
     flexDirection: 'column',
   },

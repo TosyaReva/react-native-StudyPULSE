@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Container from './Container';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import GradientContainer from './GradientContainer';
@@ -8,8 +8,10 @@ export default function CategoryItem({
   progress = 0.5,
   title = 'title',
   subtitle = 'subtitle',
+  onPress,
 }) {
   return (
+    <Pressable onPress={onPress}>
     <Container style={style.mainContainer}>
       <MaterialIcon name={'local-fire-department'} size={32} color="#000" />
       <View style={style.containerCenter}>
@@ -31,6 +33,7 @@ export default function CategoryItem({
       </View>
       <MaterialIcon name={'local-fire-department'} size={20} color={COLORS.secondaryText} />
     </Container>
+    </Pressable>
   );
 }
 

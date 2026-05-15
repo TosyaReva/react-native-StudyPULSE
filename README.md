@@ -1,36 +1,79 @@
-# Аналіз та створення компонентів у React Native
+# React Native — Навігація у застосунку
 
-Цей репозиторій містить виконання домашнього завдання зі створення та стилізації базових компонентів у React Native.
+Цей репозиторій містить виконання домашнього завдання з проектування та реалізації навігаційної структури у React Native.
+
+## 🎬 Демонстрація навігації
+
+![Navigation Demo iOS](./screenshots/navigation-ios.gif)
+
+---
+
+## 🗺 Навігаційна структура
+
+```
+App
+└── StackNavigator
+    ├── SplashScreen              (вхідний екран, replace → HOME)
+    └── DrawerNavigator (HOME)
+        ├── TabNavigator
+        │   ├── HomeScreen        (головний екран)
+        │   └── CategoriesScreen  (список категорій)
+        └── ActiveCategoryScreen  (деталі категорії, route.params)
+```
+
+| Тип навігації      | Де використовується                      |
+| ------------------ | ---------------------------------------- |
+| `Stack.Navigator`  | Кореневий контейнер + перехід до деталей |
+| `Tab.Navigator`    | Головна / Категорії                      |
+| `Drawer.Navigator` | Бокове меню застосунку                   |
+
+### Передача даних між екранами
+
+- `CategoriesScreen → ActiveCategoryScreen` через `navigation.navigate(SCREENS.ACTIVE_CATEGORY, { ...task })`
+- `ActiveCategoryScreen` отримує дані через `route.params`
+
+---
 
 ## 📱 Скриншоти компонентів
 
 **Android:**
+
 ![Components](./screenshots/Components.webp)
 ![Categories List](./screenshots/CategoriesList.webp)
 
-**IOS:**
+**iOS:**
+
 ![Components IOS](./screenshots/ComponentsIOS.webp)
 ![Categories List IOS](./screenshots/CategoriesListIOS.webp)
 
+---
+
 ## 🛠 Реалізовані компоненти
 
-У проекті виділено та створено наступні ключові компоненти (знаходяться в `src/components/`):
+У проекті виділено та створено наступні ключові компоненти (`src/components/`):
 
-1. **`Button`** — кастомна кнопка, стилізована з використанням `Pressable`.
-2. **`CategoryItem`** — картка категорії (використано `View`, `Text`, `GradientContainer`).
-3. **`CategoryList`** — прокручуваний список категорій на основі `FlatList`.
-4. **`SearchInput`** — поле вводу для пошуку (`TextInput`).
-5. **`Stat`** — компонент статистики з використанням векторних іконок.
-6. **`Container`** — обгортка з адаптивними тінями (`Platform.select`).
-7. **`Logo`** — компонент зображення з адаптивною шириною (`useWindowDimensions`).
+| Компонент      | Опис                                                               |
+| -------------- | ------------------------------------------------------------------ |
+| `Button`       | Кастомна кнопка (`Pressable` + градієнт через `GradientContainer`) |
+| `CategoryItem` | Картка категорії з `DonutBar` прогрес-індикатором                  |
+| `CategoryList` | Прокручуваний список (`FlatList`)                                  |
+| `SearchInput`  | Поле пошуку (`TextInput`)                                          |
+| `Stat`         | Статистика з векторними іконками (`react-native-vector-icons`)     |
+| `Container`    | Обгортка з нативними тінями (`Platform.select`)                    |
+| `RadioButton`  | Кнопка вибору з градієнтним бордером (`GradientBorder`)            |
+| `Logo`         | Адаптивне зображення (`useWindowDimensions`)                       |
+
+---
 
 ## ✨ Особливості реалізації
 
-- **Модульність:** Кожен компонент знаходиться у власному файлі.
-- **Пропси:** Компоненти приймають динамічні дані через пропси (`title`, `progress`, `icon` тощо).
-- **Стилізація:** Використано `StyleSheet.create` та Flexbox для позиціонування.
-- **Адаптивність:** Використано `useWindowDimensions` для обчислення ширини та `Platform.select()` для нативної тіні на iOS/Android.
-- **Чистота коду:** Кольори винесено у константи (`src/constants/colors.js`), щоб уникнути "магічних чисел".
+- **Модульність:** Навігаційні стеки у власних файлах (`src/navigations/`)
+- **Константи екранів:** `SCREENS.HOME`, `SCREENS.ACTIVE_CATEGORY` тощо (`src/constants/screens.js`)
+- **Передача параметрів:** `navigation.navigate()` + `route.params`
+- **Стилізація навігації:** `headerShown: false`, кастомні анімації (`CardStyleInterpolators`)
+- **replace замість navigate:** `SplashScreen` видаляється зі стеку після переходу
+- **Адаптивність:** `useWindowDimensions`, `Platform.select()`, `useSafeAreaInsets`
+- **Чистота коду:** Кольори та назви екранів у константах
 
 ---
 

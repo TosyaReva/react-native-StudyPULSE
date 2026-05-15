@@ -1,26 +1,37 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import GradientContainer from './GradientContainer';
 import { COLORS } from '../constants/colors';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
-export default function Button({ title = 'Button', onPress, primary = false }) {
+export default function Button({
+  title = 'Button',
+  onPress,
+  primary = false,
+  style,
+  icon,
+}) {
+  const iconColor = !primary ? COLORS.brand : COLORS.white;
+
+  const Icon = () => {
+    return icon ? <MaterialIcon name={icon} size={20} color={iconColor} /> : null;
+  };
+
   const Gradient = primary
     ? () => (
-        <GradientContainer style={styles.wrapper}>
-          <Text style={styles.text}>{title}</Text>
-        </GradientContainer>
-      )
-    : () => (
-        <View style={{ ...styles.wrapper, ...styles.secondaryButton }}>
-          <Text style={{ ...styles.text, ...styles.secondaryText }}>
-            {title}
-          </Text>
-        </View>
-      );
-  return (
-    <Pressable onPress={onPress} style={styles.button}>
-      <Gradient>
+      <GradientContainer style={styles.gradientWrapper} innerStyle={styles.inner}>
+        <Icon />
         <Text style={styles.text}>{title}</Text>
-      </Gradient>
+      </GradientContainer>
+    )
+    : () => (
+      <View style={[styles.inner, styles.secondaryButton]}>
+        <Icon />
+        <Text style={[styles.text, styles.secondaryText]}>{title}</Text>
+      </View>
+    );
+  return (
+    <Pressable onPress={onPress} style={[styles.button, style]}>
+      <Gradient>{/* <Text style={styles.text}>{title}</Text> */}</Gradient>
     </Pressable>
   );
 }
@@ -29,21 +40,29 @@ const styles = StyleSheet.create({
   button: {
     width: '100%',
   },
-  wrapper: {
+  gradientWrapper: {
     borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 24,
+  },
+  inner: {
+    flexDirection: 'row',
+    gap: 8,
+    justifyContent: 'center',
     alignItems: 'center',
+    paddingHorizontal: 24,
+    paddingVertical: 16,
+    borderRadius: 20,
   },
   secondaryButton: {
     backgroundColor: COLORS.white,
+    alignItems: 'center',
   },
   text: {
     fontWeight: 500,
     fontSize: 16,
-    lineHeight: '150%',
+    lineHeight: 24,
     letterSpacing: 1,
     color: COLORS.white,
+    textAlign: 'center',
   },
   secondaryText: {
     color: COLORS.brand,
