@@ -10,7 +10,7 @@ const Drawer = createDrawerNavigator();
 export default function DrawerNavigation() {
   return (
     <Drawer.Navigator
-      initialRouteName={SCREENS.HOME}
+      initialRouteName={SCREENS.TAB_ROOT}
       screenOptions={{
         headerTitle: '',
         headerStyle: {
@@ -23,7 +23,7 @@ export default function DrawerNavigation() {
         },
       }}
     >
-      <Drawer.Screen name={SCREENS.HOME} component={TabNavigation} />
+      <Drawer.Screen name={SCREENS.TAB_ROOT} component={TabNavigation} />
       <Drawer.Screen name={SCREENS.UI_KIT} component={UI_kit} />
     </Drawer.Navigator>
   );

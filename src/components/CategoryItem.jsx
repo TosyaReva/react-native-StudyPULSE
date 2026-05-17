@@ -5,19 +5,19 @@ import GradientContainer from './GradientContainer';
 import { COLORS } from '../constants/colors';
 
 export default function CategoryItem({
-  progress = 0.5,
   title = 'title',
-  subtitle = 'subtitle',
+  icon = 'local-fire-department',
+  color = '#000',
   onPress,
 }) {
   return (
     <Pressable onPress={onPress}>
     <Container style={style.mainContainer}>
-      <MaterialIcon name={'local-fire-department'} size={32} color="#000" />
+      <MaterialIcon name={icon} size={32} color={color} />
       <View style={style.containerCenter}>
         <View style={style.containerText}>
           <Text style={style.title}>{title}</Text>
-          <Text style={style.subtitle}>{subtitle}</Text>
+          <Text style={style.subtitle}>Ready to focus</Text>
         </View>
         {/*  progress bar */}
         <View style={style.containerProgress}>
@@ -25,13 +25,13 @@ export default function CategoryItem({
             style={{
               ...style.progressBar,
               ...style.progressActive,
-              width: `${progress * 100}%`,
+              width: '0%',
             }}
           ></GradientContainer>
           <View style={{ ...style.progressBar, ...style.progressLeft }}></View>
         </View>
       </View>
-      <MaterialIcon name={'local-fire-department'} size={20} color={COLORS.secondaryText} />
+      <MaterialIcon name="chevron-right" size={24} color={COLORS.secondaryText} />
     </Container>
     </Pressable>
   );

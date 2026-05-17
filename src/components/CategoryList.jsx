@@ -20,8 +20,8 @@ export default function CategoryList({ data, navigation }) {
       renderItem={({ item }) => (
         <CategoryItem
           title={item.title}
-          subtitle={item.subtitle}
-          progress={item.progress}
+          icon={item.icon}
+          color={item.color}
           onPress={() => handleOnPress(item)}
         />
       )}

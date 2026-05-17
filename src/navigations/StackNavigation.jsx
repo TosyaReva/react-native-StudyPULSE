@@ -37,7 +37,7 @@ export default function StackNavigation() {
             animationEnabled: false,
           }}
         />
-        <Stack.Screen name={SCREENS.HOME} component={DrawerNavigation} />
+        <Stack.Screen name={SCREENS.DRAWER_ROOT} component={DrawerNavigation} />
         <Stack.Screen
           name={SCREENS.ACTIVE_CATEGORY}
           component={ActiveCategoryScreen}

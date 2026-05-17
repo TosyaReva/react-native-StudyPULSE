@@ -1,57 +1,69 @@
-import { View, Text, StyleSheet, Image } from 'react-native';
-import React, { useMemo, useState } from 'react';
-import CustomText from '../components/CustomText';
+import React, { useEffect, useMemo, useState } from 'react';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import ButtonPlusCircle from '../components/ButtonPlusCircle.jsx';
+import CategoryList from '../components/CategoryList.jsx';
+import CustomText from '../components/CustomText';
 import SearchInput from '../components/SearchInput.jsx';
 import ScreenComponent from './ScreenComponent.jsx';
-import CategoryList from '../components/CategoryList.jsx';
 
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'React Native',
-    subtitle: '12h this week',
-    progress: 0.3,
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'English',
-    subtitle: '5h this week',
-    progress: 0.7,
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'UI Design',
-    subtitle: '8h this week',
-    progress: 0.85,
-  },
-];
+import { fetchCategories } from '../api/api';
+import { COLORS } from '../constants/colors';
 
 const CategoriesScreen = ({ navigation }) => {
+  const [categories, setCategories] = useState([]);  // raw data from API
+  const [loading, setLoading] = useState(true); // show spinner while fetching
+  const [error, setError] = useState(null); // hold error message if any
   const [searchValue, setSearchValue] = useState('');
 
-  const categories = useMemo(
-    () =>
-      !searchValue
-        ? DATA
-        : DATA.filter(({ title }) =>
-          title.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()),
-        ),
-    [searchValue],
-  );
+  useEffect(() => {
+    fetchCategories()
+      .then(data => setCategories(data))
+      .catch(err => {
+        console.error('Failed to load categories:', err);
+        setError('Could not load categories. Check your connection and try again.');
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filteredCategories = useMemo(() => {
+    if (!searchValue) return categories;
+    return categories.filter(({ title }) =>
+      title.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()),
+    );
+  }, [searchValue, categories]);
 
   return (
     <ScreenComponent style={styles.container}>
+      {/* Header row */}
       <View style={styles.header}>
         <CustomText type="title">Focus Categories</CustomText>
         <ButtonPlusCircle />
       </View>
 
-      <SearchInput
-        callback={setSearchValue}
-        placeholder="Search categories..."
-      />
-      <CategoryList data={categories} navigation={navigation} />
+      {/* Search bar */}
+      <SearchInput callback={setSearchValue} placeholder="Search categories..." />
+
+      {/* Loading spinner */}
+      {loading && (
+        <ActivityIndicator
+          size="large"
+          color={COLORS.brand}
+          style={styles.centered}
+        />
+      )}
+
+      {/* Error message */}
+      {!loading && error && (
+        <Text style={styles.errorText}>{error}</Text>
+      )}
+
+      {/* Category list */}
+      {!loading && !error && (
+        <CategoryList
+          data={filteredCategories}
+          navigation={navigation}
+        />
+      )}
     </ScreenComponent>
   );
 };
@@ -65,5 +77,14 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  centered: {
+    marginTop: 40,
+  },
+  errorText: {
+    color: '#FF6584',
+    textAlign: 'center',
+    marginTop: 24,
+    fontSize: 14,
   },
 });

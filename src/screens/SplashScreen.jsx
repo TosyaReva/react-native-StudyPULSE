@@ -8,7 +8,7 @@ import SCREENS from '../constants/screens';
 import ScreenComponent from './ScreenComponent.jsx';
 
 export default function SplashScreen({ navigation }) {
-  const navigateToHome = () => navigation.replace(SCREENS.HOME);
+  const navigateToHome = () => navigation.replace(SCREENS.DRAWER_ROOT);
   return (
     <ScreenComponent style={styles.container}>
       <View style={styles.containerTop}>
