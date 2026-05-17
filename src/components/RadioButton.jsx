@@ -1,8 +1,14 @@
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import Container from './Container';
 import GradientBorder from './GradientBorder';
 
-export default function RadioButton({ title = 'value', isActive, onPress }) {
+export default function RadioButton({
+  title = 'value',
+  isActive,
+  onPress,
+  children,
+  style,
+}) {
   const Wrapper = ({ children }) =>
     isActive ? (
       <GradientBorder borderWidth={1.5} borderRadius={8}>
@@ -12,10 +18,10 @@ export default function RadioButton({ title = 'value', isActive, onPress }) {
       <>{children}</>
     );
   return (
-    <Pressable onPress={() => onPress(title)}>
+    <Pressable onPress={() => onPress(title)} style={style}>
       <Wrapper>
         <Container style={isActive && styles.activeContainer}>
-          <Text>{title}</Text>
+          {children}
         </Container>
       </Wrapper>
     </Pressable>
@@ -23,12 +29,10 @@ export default function RadioButton({ title = 'value', isActive, onPress }) {
 }
 
 const styles = StyleSheet.create({
-  // Прибираємо border і тінь коли активний — залишаємо місце градієнтному бордеру
   activeContainer: {
     borderWidth: 0,
     elevation: 0,
     shadowOpacity: 0,
-    // borderRadius трохи менший ніж у GradientBorder щоб виглядало акуратно
     borderRadius: 7,
   },
 });

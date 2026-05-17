@@ -8,9 +8,10 @@ import ScreenComponent from './ScreenComponent.jsx';
 
 import { fetchCategories } from '../api/api';
 import { COLORS } from '../constants/colors';
+import SCREENS from '../constants/screens.js';
 
 const CategoriesScreen = ({ navigation }) => {
-  const [categories, setCategories] = useState([]);  // raw data from API
+  const [categories, setCategories] = useState([]); // raw data from API
   const [loading, setLoading] = useState(true); // show spinner while fetching
   const [error, setError] = useState(null); // hold error message if any
   const [searchValue, setSearchValue] = useState('');
@@ -20,7 +21,9 @@ const CategoriesScreen = ({ navigation }) => {
       .then(data => setCategories(data))
       .catch(err => {
         console.error('Failed to load categories:', err);
-        setError('Could not load categories. Check your connection and try again.');
+        setError(
+          'Could not load categories. Check your connection and try again.',
+        );
       })
       .finally(() => setLoading(false));
   }, []);
@@ -37,11 +40,16 @@ const CategoriesScreen = ({ navigation }) => {
       {/* Header row */}
       <View style={styles.header}>
         <CustomText type="title">Focus Categories</CustomText>
-        <ButtonPlusCircle />
+        <ButtonPlusCircle
+          onPress={() => navigation.navigate(SCREENS.ADD_NEW_CATEGORY)}
+        />
       </View>
 
       {/* Search bar */}
-      <SearchInput callback={setSearchValue} placeholder="Search categories..." />
+      <SearchInput
+        callback={setSearchValue}
+        placeholder="Search categories..."
+      />
 
       {/* Loading spinner */}
       {loading && (
@@ -53,16 +61,11 @@ const CategoriesScreen = ({ navigation }) => {
       )}
 
       {/* Error message */}
-      {!loading && error && (
-        <Text style={styles.errorText}>{error}</Text>
-      )}
+      {!loading && error && <Text style={styles.errorText}>{error}</Text>}
 
       {/* Category list */}
       {!loading && !error && (
-        <CategoryList
-          data={filteredCategories}
-          navigation={navigation}
-        />
+        <CategoryList data={filteredCategories} navigation={navigation} />
       )}
     </ScreenComponent>
   );

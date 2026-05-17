@@ -1,8 +1,11 @@
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import { createStackNavigator, CardStyleInterpolators } from '@react-navigation/stack';
+import {
+  createStackNavigator,
+  CardStyleInterpolators,
+} from '@react-navigation/stack';
 import {
   SplashScreen,
-  HomeScreen,
+  AddNewCategoryScreen,
   UI_kit,
   ActiveCategoryScreen,
 } from '../screens';
@@ -41,6 +44,10 @@ export default function StackNavigation() {
         <Stack.Screen
           name={SCREENS.ACTIVE_CATEGORY}
           component={ActiveCategoryScreen}
+        />
+        <Stack.Screen
+          name={SCREENS.ADD_NEW_CATEGORY}
+          component={AddNewCategoryScreen}
         />
       </Stack.Navigator>
     </NavigationContainer>
