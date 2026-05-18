@@ -3,21 +3,25 @@ import Container from './Container';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import GradientContainer from './GradientContainer';
 import { COLORS } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 
 export default function CategoryItem({
   title = 'title',
   icon = 'local-fire-department',
   color = '#000',
+  progress = 0,
   onPress,
 }) {
+  const { themeColors } = useTheme();
+
   return (
     <Pressable onPress={onPress}>
     <Container style={style.mainContainer}>
       <MaterialIcon name={icon} size={32} color={color} />
       <View style={style.containerCenter}>
         <View style={style.containerText}>
-          <Text style={style.title}>{title}</Text>
-          <Text style={style.subtitle}>Ready to focus</Text>
+          <Text style={[style.title, { color: themeColors.primaryText }]}>{title}</Text>
+          <Text style={[style.subtitle, { color: themeColors.secondaryText }]}>Ready to focus</Text>
         </View>
         {/*  progress bar */}
         <View style={style.containerProgress}>
@@ -25,13 +29,13 @@ export default function CategoryItem({
             style={{
               ...style.progressBar,
               ...style.progressActive,
-              width: '0%',
+              width: `${progress}%`,
             }}
           ></GradientContainer>
-          <View style={{ ...style.progressBar, ...style.progressLeft }}></View>
+          <View style={{ ...style.progressBar, ...style.progressLeft, backgroundColor: themeColors.background }}></View>
         </View>
       </View>
-      <MaterialIcon name="chevron-right" size={24} color={COLORS.secondaryText} />
+      <MaterialIcon name="chevron-right" size={24} color={themeColors.secondaryText} />
     </Container>
     </Pressable>
   );
@@ -54,12 +58,10 @@ const style = StyleSheet.create({
   title: {
     fontSize: 14,
     fontWeight: 500,
-    color: COLORS.primaryText,
   },
   subtitle: {
     fontSize: 14,
     fontWeight: 400,
-    color: COLORS.secondaryText,
   },
   containerProgress: {
     flexDirection: 'row',
@@ -69,12 +71,10 @@ const style = StyleSheet.create({
     height: 4,
   },
   progressActive: {
-    backgroundColor: COLORS.primaryText,
     borderRadius: 2,
   },
   progressLeft: {
     flex: 1,
-    backgroundColor: COLORS.background,
     borderRadius: 2,
   },
 });

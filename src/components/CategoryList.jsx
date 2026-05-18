@@ -22,6 +22,7 @@ export default function CategoryList({ data, navigation }) {
           title={item.title}
           icon={item.icon}
           color={item.color}
+          progress={item.progress}
           onPress={() => handleOnPress(item)}
         />
       )}

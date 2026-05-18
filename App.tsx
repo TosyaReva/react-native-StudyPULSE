@@ -16,14 +16,22 @@ import {
 } from 'react-native-safe-area-context';
 import StackNavigation from './src/navigations/StackNavigation';
 
+import { ThemeProvider } from './src/context/ThemeContext';
+import { Provider } from 'react-redux';
+import { store } from './src/redux/store';
+
 function App() {
   const isDarkMode = useColorScheme() === 'dark';
 
   return (
-    <SafeAreaProvider>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <AppContent />
-    </SafeAreaProvider>
+    <Provider store={store}>
+      <ThemeProvider>
+        <SafeAreaProvider>
+          <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
+          <AppContent />
+        </SafeAreaProvider>
+      </ThemeProvider>
+    </Provider>
   );
 }
 

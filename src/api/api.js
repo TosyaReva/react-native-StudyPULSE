@@ -21,6 +21,23 @@ export const fetchCategories = async () => {
 };
 
 /**
+ * Create a new category.
+ * @param {Object} category
+ * @param {string} category.title
+ * @param {string} category.icon
+ * @param {string} category.color
+ * @returns {Promise<Object>} the created category object
+ */
+export const createCategory = async ({ title, icon, color }) => {
+  const response = await client.post('/categories', {
+    title,
+    icon,
+    color,
+  });
+  return Array.isArray(response.data) ? response.data[0] : response.data;
+};
+
+/**
  * Fetch a single category by its UUID.
  * @param {string} id — category UUID
  * @returns {Promise<Object>} category object

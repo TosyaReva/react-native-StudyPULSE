@@ -3,6 +3,7 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import React from 'react';
 import Container from './Container';
 import { COLORS } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 
 export default function ButtonTimer({
   icon = 'pause',
@@ -10,12 +11,13 @@ export default function ButtonTimer({
   onPress,
   isActive = false,
 }) {
-  const color = isActive ? COLORS.brand : COLORS.secondaryText;
+  const { themeColors } = useTheme();
+  const color = isActive ? COLORS.brand : themeColors.secondaryText;
   return (
     <Pressable onPress={onPress} style={{ flex: 1 }}>
       <Container style={styles.container}>
         <MaterialIcon name={icon} size={32} color={color} />
-        <Text style={isActive ? styles.titleActive : styles.title}>
+        <Text style={isActive ? styles.titleActive : [styles.title, { color: themeColors.secondaryText }]}>
           {title}
         </Text>
       </Container>

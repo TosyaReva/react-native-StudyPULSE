@@ -1,39 +1,34 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  fetchCategoriesAsync,
+  selectCategoriesBySearch,
+  selectCategoriesLoading,
+  selectCategoriesError
+} from '../redux/slices/categoriesSlice';
+
 import ButtonPlusCircle from '../components/ButtonPlusCircle.jsx';
 import CategoryList from '../components/CategoryList.jsx';
 import CustomText from '../components/CustomText';
 import SearchInput from '../components/SearchInput.jsx';
 import ScreenComponent from './ScreenComponent.jsx';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
-import { fetchCategories } from '../api/api';
 import { COLORS } from '../constants/colors';
 import SCREENS from '../constants/screens.js';
 
 const CategoriesScreen = ({ navigation }) => {
-  const [categories, setCategories] = useState([]); // raw data from API
-  const [loading, setLoading] = useState(true); // show spinner while fetching
-  const [error, setError] = useState(null); // hold error message if any
+  const dispatch = useDispatch();
   const [searchValue, setSearchValue] = useState('');
 
-  useEffect(() => {
-    fetchCategories()
-      .then(data => setCategories(data))
-      .catch(err => {
-        console.error('Failed to load categories:', err);
-        setError(
-          'Could not load categories. Check your connection and try again.',
-        );
-      })
-      .finally(() => setLoading(false));
-  }, []);
+  const loading = useSelector(selectCategoriesLoading);
+  const error = useSelector(selectCategoriesError);
+  const filteredCategories = useSelector((state) => selectCategoriesBySearch(state, searchValue));
 
-  const filteredCategories = useMemo(() => {
-    if (!searchValue) return categories;
-    return categories.filter(({ title }) =>
-      title.toLocaleLowerCase().includes(searchValue.toLocaleLowerCase()),
-    );
-  }, [searchValue, categories]);
+  useEffect(() => {
+    dispatch(fetchCategoriesAsync());
+  }, [dispatch]);
 
   return (
     <ScreenComponent style={styles.container}>

@@ -1,6 +1,7 @@
-import { View, StyleSheet, Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import React, { useState } from 'react';
 import RadioButton from './RadioButton';
+import CustomText from './CustomText';
 
 export default function RadioButtonList({ data, defautlValue, onChange }) {
   const [value, setValue] = useState(defautlValue || data[0]);
@@ -13,7 +14,7 @@ export default function RadioButtonList({ data, defautlValue, onChange }) {
           title={title}
           isActive={value === title}
         >
-          <Text>{title}</Text>
+          <CustomText>{title}</CustomText>
         </RadioButton>
       ))}
     </View>

@@ -1,8 +1,8 @@
 import { View, Text, StyleSheet } from 'react-native';
 import Container from './Container';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-// import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { COLORS } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 
 export default function Stat({
   icon = 'access-time',
@@ -11,7 +11,9 @@ export default function Stat({
   subtitle = 'subtitle',
   style,
 }) {
-  const iconColor = iconActive ? COLORS.brand : COLORS.primaryText;
+  const { themeColors } = useTheme();
+  const iconColor = iconActive ? COLORS.brand : themeColors.primaryText;
+  
   return (
     <Container style={style}>
       <MaterialIcon
@@ -21,8 +23,8 @@ export default function Stat({
         style={styles.icon}
       />
       <View style={styles.containerText}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.subtitle}>{subtitle}</Text>
+        <Text style={[styles.title, { color: themeColors.primaryText }]}>{title}</Text>
+        <Text style={[styles.subtitle, { color: themeColors.secondaryText }]}>{subtitle}</Text>
       </View>
     </Container>
   );
@@ -38,10 +40,8 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: 500,
-    color: COLORS.primaryText,
   },
   subtitle: {
     fontSize: 12,
-    color: COLORS.secondaryText,
   },
 });

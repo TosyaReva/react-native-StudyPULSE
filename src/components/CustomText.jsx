@@ -1,8 +1,15 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { COLORS } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 
 export default function CustomText({ type = 'subtitle', children, style }) {
-  return <Text style={[styles[type], style]}>{children}</Text>;
+  const { themeColors } = useTheme();
+  
+  const dynamicColor = {
+    color: type === 'subtitle' ? themeColors.secondaryText : themeColors.primaryText,
+  };
+
+  return <Text style={[styles[type], dynamicColor, style]}>{children}</Text>;
 }
 
 const styles = StyleSheet.create({

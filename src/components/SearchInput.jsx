@@ -1,7 +1,7 @@
 import { StyleSheet, TextInput, View } from 'react-native';
 import React, { useState } from 'react';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import { COLORS } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
 
 export default function SearchInput({
   callback,
@@ -9,6 +9,7 @@ export default function SearchInput({
   showIcon = true,
 }) {
   const [text, setText] = useState('');
+  const { themeColors } = useTheme();
 
   const handleChange = value => {
     setText(value);
@@ -18,19 +19,19 @@ export default function SearchInput({
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: themeColors.surface }]}>
       <TextInput
-        style={styles.input}
+        style={[styles.input, { color: themeColors.primaryText }]}
         value={text}
         onChangeText={handleChange}
         placeholder={placeholder}
-        placeholderTextColor={COLORS.secondaryText}
+        placeholderTextColor={themeColors.secondaryText}
       />
       {showIcon && (
         <MaterialIcon
           name="search"
           size={24}
-          color={COLORS.secondaryText}
+          color={themeColors.secondaryText}
           style={styles.icon}
         />
       )}
@@ -42,7 +43,6 @@ const styles = StyleSheet.create({
   container: {
     padding: 4,
     borderRadius: 8,
-    backgroundColor: COLORS.white,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -51,7 +51,6 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingHorizontal: 20,
     paddingVertical: 12,
-    color: COLORS.primaryText,
   },
   icon: {
     padding: 12,

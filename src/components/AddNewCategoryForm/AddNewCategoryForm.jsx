@@ -1,11 +1,14 @@
-import { View, StyleSheet, Pressable, Text } from 'react-native';
+import { View, StyleSheet, Pressable, Text, ScrollView, Alert } from 'react-native';
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigation } from '@react-navigation/native';
+import { addCategoryAsync } from '../../redux/slices/categoriesSlice';
+
 import CustomText from '../CustomText.jsx';
 import RadioButton from '../RadioButton.jsx';
 import SearchInput from '../SearchInput.jsx';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { COLORS } from '../../constants/colors';
-import { ScrollView } from 'react-native';
 import Button from '../Button.jsx';
 
 const iconsToRender = [
@@ -20,6 +23,26 @@ export default function AddNewCategoryForm() {
   const [name, setName] = useState('');
   const [value, setValue] = useState(iconsToRender[0]);
   const [iconColor, setIconColor] = useState(COLORS.iconColors[0]);
+
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+
+  const handleSave = () => {
+    if (!name.trim()) {
+      Alert.alert('Помилка', 'Введіть назву категорії');
+      return;
+    }
+    
+    dispatch(addCategoryAsync({ title: name, icon: value, color: iconColor }))
+      .unwrap()
+      .then(() => {
+        navigation.goBack();
+      })
+      .catch((error) => {
+        Alert.alert('Помилка', 'Не вдалося зберегти категорію');
+        console.error(error);
+      });
+  };
 
   return (
     <View style={styles.form}>
@@ -50,6 +73,7 @@ export default function AddNewCategoryForm() {
           {COLORS.iconColors.map(color => {
             return (
               <Pressable
+                key={color}
                 style={[
                   styles.colorItem,
                   {
@@ -70,7 +94,7 @@ export default function AddNewCategoryForm() {
           })}
         </View>
       </View>
-      <Button title="Save Category" primary />
+      <Button title="Save Category" primary onPress={handleSave} />
     </View>
   );
 }

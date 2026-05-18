@@ -2,6 +2,7 @@ import { Pressable, StyleSheet, Text, View } from 'react-native';
 import GradientContainer from './GradientContainer';
 import { COLORS } from '../constants/colors';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import { useTheme } from '../context/ThemeContext';
 
 export default function Button({
   title = 'Button',
@@ -10,6 +11,7 @@ export default function Button({
   style,
   icon,
 }) {
+  const { themeColors } = useTheme();
   const iconColor = !primary ? COLORS.brand : COLORS.white;
 
   const Icon = () => {
@@ -24,7 +26,7 @@ export default function Button({
       </GradientContainer>
     )
     : () => (
-      <View style={[styles.inner, styles.secondaryButton]}>
+      <View style={[styles.inner, styles.secondaryButton, { backgroundColor: themeColors.surface }]}>
         <Icon />
         <Text style={[styles.text, styles.secondaryText]}>{title}</Text>
       </View>

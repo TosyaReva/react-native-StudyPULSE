@@ -3,8 +3,11 @@ import React from 'react';
 import CustomText from '../components/CustomText';
 import CircularProgress from 'react-native-circular-progress-indicator';
 import { COLORS } from '../constants/colors.js';
+import { useTheme } from '../context/ThemeContext';
 
 export default function DonutBar({ style, progress = 0, title = "Task Title" }) {
+  const { themeColors, theme } = useTheme();
+
   return (
     <View style={[styles.container, style]}>
       <CircularProgress
@@ -15,13 +18,13 @@ export default function DonutBar({ style, progress = 0, title = "Task Title" }) 
         showProgressValue={false}
         activeStrokeColor={COLORS.gradientStart}
         activeStrokeSecondaryColor={COLORS.gradientEnd}
-        inActiveStrokeColor={'transparent'}
+        inActiveStrokeColor={theme === 'light' ? 'rgba(0,0,0,0.05)' : '#333333'}
         activeStrokeWidth={20}
         inActiveStrokeWidth={20}
         rotation={-45}
       />
       <View style={{ position: 'absolute' }}>
-        <Text style={styles.title}>{progress}.00</Text>
+        <Text style={[styles.title, { color: themeColors.primaryText }]}>{progress}.00</Text>
         <CustomText style={styles.subtitle}>Current Task</CustomText>
         <CustomText style={[styles.subtitle, styles.textTask]}>
           {title}

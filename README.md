@@ -56,6 +56,16 @@ App
 
 ---
 
+## 🌍 Управління станом (Context API та Redux)
+
+**Перемикач теми (Context API) та Управління категоріями (Redux Toolkit):**
+- Демонстрація роботи світлої/темної теми, яка керується через глобальний Context API.
+- Робота з категоріями (завантаження та додавання) реалізована через Redux (`createAsyncThunk` + Supabase).
+
+![Redux Categories Demo](./screenshots/ReduxCategories.gif)
+
+---
+
 ## 🛠 Реалізовані компоненти
 
 У проекті виділено та створено наступні ключові компоненти (`src/components/`):

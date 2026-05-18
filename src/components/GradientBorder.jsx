@@ -1,5 +1,6 @@
 import LinearGradient from 'react-native-linear-gradient';
 import { COLORS } from '../constants/colors';
+import { View, StyleSheet } from 'react-native';
 
 /**
  * @param {number} borderWidth - товщина градієнтного бордеру (default: 1)
@@ -13,14 +14,14 @@ export default function GradientBorder({
   style,
 }) {
   return (
-    <LinearGradient
-      colors={[COLORS.gradientStart, COLORS.gradientEnd]}
-      useAngle={true}
-      angle={45}
-      angleCenter={{ x: 0.5, y: 0.5 }}
-      style={[{ padding: borderWidth, borderRadius, overflow: 'hidden' }, style]}
-    >
+    <View style={[{ borderRadius, overflow: 'hidden', padding: borderWidth }, style]}>
+      <LinearGradient
+        colors={[COLORS.gradientStart, COLORS.gradientEnd]}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+        style={StyleSheet.absoluteFill}
+      />
       {children}
-    </LinearGradient>
+    </View>
   );
 }

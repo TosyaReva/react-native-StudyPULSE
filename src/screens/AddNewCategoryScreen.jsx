@@ -7,7 +7,6 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { COLORS } from '../constants/colors';
 
 export default function AddNewCategoryScreen({ navigation, route }) {
-  const task = route.params || {};
   return (
     <ScreenComponent style={{ marginTop: 40 }}>
       {/* Header */}
@@ -17,14 +16,15 @@ export default function AddNewCategoryScreen({ navigation, route }) {
             <CustomText type="title" style={styles.title}>
               New Category
             </CustomText>
+            {/* Exit button */}
+            <Pressable
+              onPress={() => navigation.goBack()}
+              style={styles.backButton}
+            >
+              <MaterialIcon name="close" size={24} color={COLORS.primaryText} />
+            </Pressable>
           </View>
-          {/* Exit button */}
-          <Pressable
-            onPress={() => navigation.goBack()}
-            style={styles.backButton}
-          >
-            <MaterialIcon name="close" size={24} color={COLORS.primaryText} />
-          </Pressable>
+
           <CustomText type="subtitle">Create a new focus category</CustomText>
         </View>
       </View>
