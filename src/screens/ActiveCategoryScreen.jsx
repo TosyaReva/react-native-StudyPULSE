@@ -7,8 +7,24 @@ import ScreenComponent from './ScreenComponent.jsx';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { COLORS } from '../constants/colors';
 
+import Animated from 'react-native-reanimated';
+import { useScaleAnimation } from '../hooks/useScaleAnimation';
+
 export default function ActiveCategoryScreen({ navigation, route }) {
   const task = route.params || {};
+
+  const {
+    animatedStyle: animatedClose,
+    handlePressIn: handlePressInClose,
+    handlePressOut: handlePressOutClose,
+  } = useScaleAnimation(0.85);
+
+  const {
+    animatedStyle: animatedMore,
+    handlePressIn: handlePressInMore,
+    handlePressOut: handlePressOutMore,
+  } = useScaleAnimation(0.85);
+
   return (
     <ScreenComponent style={{ marginTop: 40 }}>
       {/* Header */}
@@ -17,17 +33,25 @@ export default function ActiveCategoryScreen({ navigation, route }) {
           {/* Back button */}
           <Pressable
             onPress={() => navigation.goBack()}
-            style={styles.backButton}
+            onPressIn={handlePressInClose}
+            onPressOut={handlePressOutClose}
           >
-            <MaterialIcon name="close" size={24} color={COLORS.primaryText} />
+            <Animated.View style={[styles.backButton, animatedClose]}>
+              <MaterialIcon name="close" size={24} color={COLORS.primaryText} />
+            </Animated.View>
           </Pressable>
           <CustomText type="title">Deep Work</CustomText>
-          <Pressable style={styles.backButton}>
-            <MaterialIcon
-              name="more-horiz"
-              size={24}
-              color={COLORS.primaryText}
-            />
+          <Pressable
+            onPressIn={handlePressInMore}
+            onPressOut={handlePressOutMore}
+          >
+            <Animated.View style={[styles.backButton, animatedMore]}>
+              <MaterialIcon
+                name="more-horiz"
+                size={24}
+                color={COLORS.primaryText}
+              />
+            </Animated.View>
           </Pressable>
         </View>
 

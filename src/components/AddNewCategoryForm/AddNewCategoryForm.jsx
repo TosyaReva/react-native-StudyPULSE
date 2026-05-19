@@ -19,6 +19,34 @@ const iconsToRender = [
   'fitness-center',
 ];
 
+import Animated from 'react-native-reanimated';
+import { useScaleAnimation } from '../../hooks/useScaleAnimation';
+
+const ColorItem = ({ color, isSelected, onPress }) => {
+  const { animatedStyle, handlePressIn, handlePressOut } = useScaleAnimation(0.85);
+
+  return (
+    <Pressable
+      onPress={() => onPress(color)}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+    >
+      <Animated.View
+        style={[
+          styles.colorItem,
+          {
+            borderColor: isSelected ? color : 'transparent',
+            borderWidth: 1,
+          },
+          animatedStyle,
+        ]}
+      >
+        <View style={[{ backgroundColor: color, flex: 1, borderRadius: 90 }]}></View>
+      </Animated.View>
+    </Pressable>
+  );
+};
+
 export default function AddNewCategoryForm() {
   const [name, setName] = useState('');
   const [value, setValue] = useState(iconsToRender[0]);
@@ -70,28 +98,14 @@ export default function AddNewCategoryForm() {
       <View style={[styles.formItem]}>
         <CustomText type="title">Choose Color</CustomText>
         <View style={styles.listColor}>
-          {COLORS.iconColors.map(color => {
-            return (
-              <Pressable
-                key={color}
-                style={[
-                  styles.colorItem,
-                  {
-                    borderColor:
-                      color === iconColor ? iconColor : 'transparent',
-                    borderWidth: 1,
-                  },
-                ]}
-                onPress={() => setIconColor(color)}
-              >
-                <View
-                  style={[
-                    { backgroundColor: color, flex: 1, borderRadius: 90 },
-                  ]}
-                ></View>
-              </Pressable>
-            );
-          })}
+          {COLORS.iconColors.map(color => (
+            <ColorItem
+              key={color}
+              color={color}
+              isSelected={color === iconColor}
+              onPress={setIconColor}
+            />
+          ))}
         </View>
       </View>
       <Button title="Save Category" primary onPress={handleSave} />

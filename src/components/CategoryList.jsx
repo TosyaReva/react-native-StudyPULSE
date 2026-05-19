@@ -1,33 +1,36 @@
+import React, { useCallback, useMemo } from 'react';
 import CategoryItem from './CategoryItem';
 import {
-  View,
   FlatList,
   StyleSheet,
-  Text,
-  StatusBar,
   Pressable,
 } from 'react-native';
 import SCREENS from '../constants/screens.js';
 
 export default function CategoryList({ data, navigation }) {
-  const handleOnPress = item => {
+  const handleOnPress = useCallback((item) => {
     navigation.navigate(SCREENS.ACTIVE_CATEGORY, item);
-  };
+  }, [navigation]);
+
+  const contentContainerStyle = useMemo(() => ({ gap: 16 }), []);
+
+  const renderItem = useCallback(({ item }) => (
+    <CategoryItem
+      item={item}
+      title={item.title}
+      icon={item.icon}
+      color={item.color}
+      progress={item.progress}
+      onPress={handleOnPress}
+    />
+  ), [handleOnPress]);
 
   return (
     <FlatList
       data={data}
-      renderItem={({ item }) => (
-        <CategoryItem
-          title={item.title}
-          icon={item.icon}
-          color={item.color}
-          progress={item.progress}
-          onPress={() => handleOnPress(item)}
-        />
-      )}
+      renderItem={renderItem}
       keyExtractor={item => item.id}
-      contentContainerStyle={{ gap: 16 }}
+      contentContainerStyle={contentContainerStyle}
     />
   );
 }

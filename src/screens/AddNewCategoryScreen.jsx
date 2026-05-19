@@ -6,7 +6,12 @@ import ScreenComponent from './ScreenComponent.jsx';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { COLORS } from '../constants/colors';
 
+import Animated from 'react-native-reanimated';
+import { useScaleAnimation } from '../hooks/useScaleAnimation';
+
 export default function AddNewCategoryScreen({ navigation, route }) {
+  const { animatedStyle: animatedClose, handlePressIn, handlePressOut } = useScaleAnimation(0.85);
+
   return (
     <ScreenComponent style={{ marginTop: 40 }}>
       {/* Header */}
@@ -19,9 +24,12 @@ export default function AddNewCategoryScreen({ navigation, route }) {
             {/* Exit button */}
             <Pressable
               onPress={() => navigation.goBack()}
-              style={styles.backButton}
+              onPressIn={handlePressIn}
+              onPressOut={handlePressOut}
             >
-              <MaterialIcon name="close" size={24} color={COLORS.primaryText} />
+              <Animated.View style={[styles.backButton, animatedClose]}>
+                <MaterialIcon name="close" size={24} color={COLORS.primaryText} />
+              </Animated.View>
             </Pressable>
           </View>
 

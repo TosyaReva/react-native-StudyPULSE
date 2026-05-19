@@ -3,6 +3,8 @@ import GradientContainer from './GradientContainer';
 import { COLORS } from '../constants/colors';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../context/ThemeContext';
+import Animated from 'react-native-reanimated';
+import { useScaleAnimation } from '../hooks/useScaleAnimation';
 
 export default function Button({
   title = 'Button',
@@ -13,6 +15,8 @@ export default function Button({
 }) {
   const { themeColors } = useTheme();
   const iconColor = !primary ? COLORS.brand : COLORS.white;
+
+  const { animatedStyle, handlePressIn, handlePressOut } = useScaleAnimation(0.95);
 
   const Icon = () => {
     return icon ? <MaterialIcon name={icon} size={20} color={iconColor} /> : null;
@@ -32,8 +36,15 @@ export default function Button({
       </View>
     );
   return (
-    <Pressable onPress={onPress} style={[styles.button, style]}>
-      <Gradient>{/* <Text style={styles.text}>{title}</Text> */}</Gradient>
+    <Pressable 
+      onPress={onPress} 
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      style={[styles.button, style]}
+    >
+      <Animated.View style={animatedStyle}>
+        <Gradient>{/* <Text style={styles.text}>{title}</Text> */}</Gradient>
+      </Animated.View>
     </Pressable>
   );
 }
