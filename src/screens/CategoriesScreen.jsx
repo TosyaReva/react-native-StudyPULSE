@@ -33,7 +33,6 @@ const CategoriesScreen = ({ navigation }) => {
 
   return (
     <ScreenComponent style={styles.container}>
-      {/* Header row */}
       <View style={styles.header}>
         <CustomText type="title">Focus Categories</CustomText>
         <ButtonPlusCircle
@@ -41,13 +40,11 @@ const CategoriesScreen = ({ navigation }) => {
         />
       </View>
 
-      {/* Search bar */}
       <SearchInput
         callback={setSearchValue}
         placeholder="Search categories..."
       />
 
-      {/* Loading spinner */}
       {loading && (
         <ActivityIndicator
           size="large"
@@ -56,10 +53,8 @@ const CategoriesScreen = ({ navigation }) => {
         />
       )}
 
-      {/* Error message */}
       {!loading && error && <Text style={styles.errorText}>{error}</Text>}
 
-      {/* Category list */}
       {!loading && !error && (
         <CategoryList data={filteredCategories} navigation={navigation} />
       )}

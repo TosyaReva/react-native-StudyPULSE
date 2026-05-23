@@ -39,7 +39,6 @@ const CategoryItem = React.memo(({
               <Text style={[style.title, { color: themeColors.primaryText }]}>{title}</Text>
               <Text style={[style.subtitle, { color: themeColors.secondaryText }]}>Ready to focus</Text>
             </View>
-            {/*  progress bar */}
             <View style={style.containerProgress}>
               <GradientContainer
                 style={[

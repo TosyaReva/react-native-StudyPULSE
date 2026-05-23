@@ -41,7 +41,6 @@ const categoriesSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder
-      // Get Categories
       .addCase(fetchCategoriesAsync.pending, state => {
         state.loading = true;
         state.error = null;
@@ -54,7 +53,6 @@ const categoriesSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       })
-      // Add Category
       .addCase(addCategoryAsync.pending, state => {
         state.loading = true;
         state.error = null;

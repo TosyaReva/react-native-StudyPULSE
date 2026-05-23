@@ -6,24 +6,24 @@ StudyPulse is a React Native app for planning study or work focus sessions. The 
 
 ## Demo
 
-- Google Drive demo video: `https://drive.google.com/file/d/1ulQB5PAchO3BxGQuBPNNN52ObsulkzLg/view?usp=sharing`
+- Google Drive demo video: [Watch the video](https://drive.google.com/file/d/1ulQB5PAchO3BxGQuBPNNN52ObsulkzLg/view?usp=sharing)
 
 ## Final screenshots
 
-These placeholders are reserved for the final screenshots before project submission.
+Screenshots of the main screens in the final version of the app.
 
 | Screen                          | Screenshot                                                           |
 | ------------------------------- | -------------------------------------------------------------------- |
 | Splash, auth and guest entry    | ![Splash](./screenshots/finalScreenshots/final-splash-auth.webp)     |
 | Home with active focus session  | ![Home](./screenshots/finalScreenshots/final-home-active-focus.webp) |
-| Categories list                 | [Categories](./screenshots/finalScreenshots/final-categories.webp)   |
+| Categories list                 | ![Categories](./screenshots/finalScreenshots/final-categories.webp)  |
 | Pomodoro focus screen           | ![Pomodoro](./screenshots/finalScreenshots/final-pomodoro.webp)      |
 | Statistics day/week/month       | ![Statistics](./screenshots/finalScreenshots/final-statistics.webp)  |
 | Settings, export, reset, logout | ![Settings](./screenshots/finalScreenshots/final-settings.webp)      |
 
-## Existing demo media
+## Additional demo media
 
-The previous demo files remain in the repository as historical media and as extra proof of navigation, lists, Redux and animation work.
+The previous demo files show the app's progress: navigation, lists, Redux and animations.
 
 ![Navigation demo](./screenshots/navigation-ios.gif)
 
@@ -205,4 +205,4 @@ The final project satisfies the required categories:
 - Functionality: auth, guest/offline mode, Pomodoro, statistics, settings actions.
 - Modularity: screens, components, API layer, storage helpers, Redux slices and helpers are separated.
 - State management: Redux Toolkit is used for app data, Theme Context is used for UI theme.
-- Documentation: this README documents the implemented changes, decision logic, setup steps and screenshot placeholders.
+- Documentation: this README documents the implemented changes, decision logic, setup steps and key screenshots.

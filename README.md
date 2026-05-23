@@ -6,11 +6,11 @@ StudyPulse - це React Native застосунок для планування 
 
 ## Демо
 
-- Google Drive відео-демо: `https://drive.google.com/file/d/1ulQB5PAchO3BxGQuBPNNN52ObsulkzLg/view?usp=sharing`
+- Google Drive відео-демо: [Переглянути відео](https://drive.google.com/file/d/1ulQB5PAchO3BxGQuBPNNN52ObsulkzLg/view?usp=sharing)
 
 ## Фінальні скріншоти
 
-Ці місця залишені для фінальних скріншотів перед здачею проєкту.
+Скріншоти ключових екранів фінальної версії застосунку.
 
 | Екран                                          | Скріншот                                                             |
 | ---------------------------------------------- | -------------------------------------------------------------------- |
@@ -21,9 +21,9 @@ StudyPulse - це React Native застосунок для планування 
 | Статистика за день/тиждень/місяць              | ![Statistics](./screenshots/finalScreenshots/final-statistics.webp)  |
 | Налаштування, експорт, скидання даних і logout | ![Settings](./screenshots/finalScreenshots/final-settings.webp)      |
 
-## Наявні демо-матеріали
+## Додаткові демо-матеріали
 
-Попередні демо-файли залишені в репозиторії як історія розвитку застосунку і додаткове підтвердження роботи навігації, списків, Redux та анімацій.
+Попередні демо-файли показують розвиток застосунку: навігацію, списки, Redux та анімації.
 
 ![Navigation demo](./screenshots/navigation-ios.gif)
 
@@ -205,4 +205,4 @@ npm run lint
 - Функціональність: auth, guest/offline mode, Pomodoro, statistics, settings actions.
 - Модульність: screens, components, API layer, storage helpers, Redux slices і helpers розділені.
 - State management: Redux Toolkit використовується для app data, Theme Context - для UI theme.
-- Документація: цей README описує впроваджені зміни, логіку рішень, setup steps і screenshot placeholders.
+- Документація: цей README описує впроваджені зміни, логіку рішень, setup steps і ключові скріншоти.

@@ -8,7 +8,7 @@ const shadowStyle = Platform.select({
     shadowRadius: 1,
   },
   android: {
-    elevation: 2, // Тінь для Android
+    elevation: 2,
   },
 });
 

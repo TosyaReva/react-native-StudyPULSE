@@ -1,4 +1,9 @@
-import { ActivityIndicator, View, Text, StyleSheet, ScrollView } from 'react-native';
+import {
+  ActivityIndicator,
+  View,
+  StyleSheet,
+  ScrollView,
+} from 'react-native';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import RadioButton from '../components/RadioButton';
@@ -11,8 +16,15 @@ import { COLORS } from '../constants/colors';
 import Container from '../components/Container';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import shadowStyle from '../constants/shadowStyle';
-import { fetchSessionsAsync, selectAllSessions, selectSessionsLoading } from '../redux/slices/sessionsSlice';
-import { fetchCategoriesAsync, selectAllCategories } from '../redux/slices/categoriesSlice';
+import {
+  fetchSessionsAsync,
+  selectAllSessions,
+  selectSessionsLoading,
+} from '../redux/slices/sessionsSlice';
+import {
+  fetchCategoriesAsync,
+  selectAllCategories,
+} from '../redux/slices/categoriesSlice';
 import { buildStatistics } from '../helpers/statistics';
 
 const innerTabs = ['day', 'week', 'month'];
@@ -40,14 +52,12 @@ export default function StatisticsScreen({ navigation }) {
 
   return (
     <ScreenComponent style={[styles.container, styles.screenPadding]}>
-      {/* Header row */}
       <View style={styles.header}>
         <CustomText type="title">Progress</CustomText>
         <CustomText type="subtitle">
           {statistics.sessionsCount} sessions
         </CustomText>
       </View>
-      {/* Inner Tabs */}
       <View style={styles.innerTabs}>
         {innerTabs.map(tabTitle => (
           <RadioButton
@@ -58,11 +68,11 @@ export default function StatisticsScreen({ navigation }) {
             onPress={setTab}
             isActive={tabTitle === tab}
           >
-            <Text
+            <CustomText
               style={[styles.tabText, tabTitle === tab && styles.tabTextActive]}
             >
               {capitalize(tabTitle)}
-            </Text>
+            </CustomText>
           </RadioButton>
         ))}
       </View>
@@ -80,7 +90,6 @@ export default function StatisticsScreen({ navigation }) {
           totalLabel={statistics.totalLabel}
           styleContainer={styles.infoContainerMargin}
         />
-        {/* Progress container 1 */}
         <Container
           style={[styles.infoContainerMargin, styles.progressContainer]}
         >
@@ -96,11 +105,9 @@ export default function StatisticsScreen({ navigation }) {
             <CustomText type="subtitle">day streak</CustomText>
           </View>
         </Container>
-        {/* SumUp Progress container*/}
-        <View
+        <Container
           style={[styles.infoContainerMargin, styles.progressSumUpContainer]}
         >
-          {/* Best focus time */}
           <View style={styles.SumUpItem}>
             <MaterialIcon name={'access-time'} size={24} color={COLORS.brand} />
             <CustomText style={styles.SumUpItemText} type="subtitle">
@@ -110,7 +117,6 @@ export default function StatisticsScreen({ navigation }) {
               {statistics.bestFocusTime}
             </CustomText>
           </View>
-          {/* Average session */}
           <View style={styles.SumUpItem}>
             <MaterialIcon
               name={'access-alarm'}
@@ -124,7 +130,6 @@ export default function StatisticsScreen({ navigation }) {
               {statistics.averageSession}
             </CustomText>
           </View>
-          {/*  Top category: Design */}
           <View style={styles.SumUpItem}>
             <MaterialIcon name={'mode-edit'} size={24} color={COLORS.brand} />
             <CustomText style={styles.SumUpItemText} type="subtitle">
@@ -134,7 +139,7 @@ export default function StatisticsScreen({ navigation }) {
               {statistics.topCategory}
             </CustomText>
           </View>
-        </View>
+        </Container>
       </ScrollView>
     </ScreenComponent>
   );
@@ -187,7 +192,6 @@ const styles = StyleSheet.create({
     color: COLORS.brand,
   },
   progressSumUpContainer: {
-    backgroundColor: COLORS.white2,
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 4,

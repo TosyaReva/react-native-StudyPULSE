@@ -45,7 +45,7 @@ export default function TabNavigation() {
           paddingBottom: 0,
           paddingVertical: 8,
           height: 64,
-          borderTopWidth: 0, // Прибираємо лінію зверху для темної теми
+          borderTopWidth: 0,
           ...Platform.select({
             ios: {
               shadowColor: '#000',

@@ -14,14 +14,12 @@ export default function AddNewCategoryScreen({ navigation, route }) {
 
   return (
     <ScreenComponent style={styles.screen}>
-      {/* Header */}
       <View>
         <View style={styles.header}>
           <View style={styles.headerRow}>
             <CustomText type="title" style={styles.title}>
               New Category
             </CustomText>
-            {/* Exit button */}
             <Pressable
               onPress={() => navigation.goBack()}
               onPressIn={handlePressIn}
@@ -37,7 +35,6 @@ export default function AddNewCategoryScreen({ navigation, route }) {
         </View>
       </View>
 
-      {/* Form */}
       <AddNewCategoryForm />
     </ScreenComponent>
   );

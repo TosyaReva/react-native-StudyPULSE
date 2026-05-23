@@ -5,7 +5,7 @@ import CustomText from '../CustomText';
 import { BarChart } from 'react-native-gifted-charts';
 import { COLORS } from '../../constants/colors';
 
-const mockData = [
+const fallbackData = [
   { value: 250, label: 'M' },
   { value: 500, label: 'T' },
   { value: 745, label: 'W' },
@@ -16,7 +16,7 @@ const mockData = [
 ];
 
 const BarChartComponent = ({
-  data = mockData,
+  data = fallbackData,
   styleContainer,
   totalLabel = '5h 40m',
   periodLabel = 'This week',

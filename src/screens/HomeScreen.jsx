@@ -94,7 +94,6 @@ export default function HomeScreen({ navigation }) {
   return (
     <ScreenComponent>
       <ScrollView>
-        {/* Header */}
         <View style={styles.header}>
           <View style={styles.headerGreetings}>
             <CustomText type="title">Good Evening</CustomText>
@@ -105,7 +104,6 @@ export default function HomeScreen({ navigation }) {
 
           <UserAvatar image={require('../assets/default_avatar.png')} />
         </View>
-        {/* Status */}
         <View style={styles.containerStatus}>
           <Stat
             icon="check-circle-outline"
@@ -123,7 +121,6 @@ export default function HomeScreen({ navigation }) {
           />
         </View>
 
-        {/* Donut Bar */}
         <DonutBar
           progress={hasActiveFocus ? activeFocusProgress : goalProgress}
           displayValue={
@@ -139,7 +136,6 @@ export default function HomeScreen({ navigation }) {
           }
         />
 
-        {/* Form */}
         <View style={styles.form}>
           {hasActiveFocus && (
             <View style={styles.activeFocusHeader}>
@@ -162,7 +158,6 @@ export default function HomeScreen({ navigation }) {
               onChange={setSelectedDuration}
             />
           )}
-          {/* Status */}
           <View style={styles.containerStatus}>
             <Stat
               icon="access-time"

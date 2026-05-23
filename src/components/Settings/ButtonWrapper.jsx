@@ -4,14 +4,29 @@ import shadowStyle from '../../constants/shadowStyle';
 import { COLORS } from '../../constants/colors';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import CustomText from '../CustomText';
+import { useTheme } from '../../context/ThemeContext';
 
-const ButtonWrapper = ({ icon, title, rightElement, onPress, disabled = false }) => {
+const ButtonWrapper = ({
+  icon,
+  title,
+  rightElement,
+  onPress,
+  disabled = false,
+}) => {
+  const { theme, themeColors } = useTheme();
+  const isDarkMode = theme === 'dark';
+
   return (
     <Pressable
       disabled={disabled || !onPress}
       onPress={onPress}
       style={({ pressed }) => [
         styles.container,
+        {
+          backgroundColor: themeColors.surface,
+          borderColor: themeColors.border,
+        },
+        isDarkMode && styles.darkContainer,
         pressed && styles.containerPressed,
         disabled && styles.containerDisabled,
       ]}
@@ -21,11 +36,15 @@ const ButtonWrapper = ({ icon, title, rightElement, onPress, disabled = false })
           <MaterialIcon
             name={icon}
             size={24}
-            color={COLORS.primaryText}
+            color={themeColors.primaryText}
             style={styles.icon}
           />
         )}
-        {title && <CustomText style={styles.titleText}>{title}</CustomText>}
+        {title && (
+          <CustomText style={[styles.titleText, { color: themeColors.primaryText }]}>
+            {title}
+          </CustomText>
+        )}
       </View>
       {rightElement}
     </Pressable>
@@ -39,11 +58,15 @@ const styles = StyleSheet.create({
     ...shadowStyle,
     padding: 12,
     borderRadius: 90,
-    backgroundColor: COLORS.white2,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingLeft: 20,
+    borderWidth: 1,
+  },
+  darkContainer: {
+    shadowOpacity: 0,
+    elevation: 0,
   },
   containerPressed: {
     opacity: 0.75,

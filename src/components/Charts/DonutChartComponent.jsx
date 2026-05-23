@@ -5,36 +5,30 @@ import CustomText from '../CustomText';
 import { PieChart } from 'react-native-gifted-charts';
 import { COLORS } from '../../constants/colors';
 
-const mockData = [
+const fallbackData = [
   {
     value: 45,
     color: COLORS.iconColors[0],
-    // gradientCenterColor: '#006DFF',
-    // focused: true,
     label: 'React Native',
   },
   {
     value: 15,
     color: COLORS.iconColors[1],
-    // gradientCenterColor: '#3BE9DE',
     label: 'Study',
   },
   {
     value: 28,
     color: COLORS.iconColors[2],
-    // gradientCenterColor: '#8F80F3',
     label: 'Design',
   },
   {
     value: 42,
     color: COLORS.iconColors[3],
-    // gradientCenterColor: '#FF7F97',
     label: 'English',
   },
   {
     value: 18,
     color: COLORS.iconColors[4],
-    // gradientCenterColor: '#FF7F97',
     label: 'Other',
   },
 ];
@@ -47,7 +41,7 @@ const CenterLabel = ({ totalLabel }) => (
 );
 
 const DonutChartComponent = ({
-  data = mockData,
+  data = fallbackData,
   styleContainer,
   totalLabel = '5h 40m',
 }) => {
@@ -83,12 +77,10 @@ const DonutChartComponent = ({
           data={data}
           donut
           showGradient
-          // sectionAutoFocus
           radius={90}
           innerRadius={60}
           strokeColor="#FFFFFF"
           strokeWidth={4}
-          // innerCircleColor={'#232B5D'}
           centerLabelComponent={renderCenterLabel}
         />
         <View style={styles.legendConteiner}>

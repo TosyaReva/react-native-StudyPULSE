@@ -2,11 +2,6 @@ import LinearGradient from 'react-native-linear-gradient';
 import { COLORS } from '../constants/colors';
 import { View, StyleSheet } from 'react-native';
 
-/**
- * @param {number} borderWidth - товщина градієнтного бордеру (default: 1)
- * @param {number} borderRadius - радіус кутів (default: 8)
- * @param {object} style - додаткові стилі для LinearGradient
- */
 export default function GradientBorder({
   children,
   borderWidth = 1,

@@ -15,7 +15,6 @@ export default function ScreenComponent({ children, style }) {
         style={[
           styles.container,
           {
-            // paddingTop: insets.top,
             paddingBottom: insets.bottom,
           },
           style,

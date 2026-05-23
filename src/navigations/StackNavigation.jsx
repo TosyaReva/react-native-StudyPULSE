@@ -14,7 +14,6 @@ const MyTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    // background: 'transparent',
   },
 };
 
@@ -25,7 +24,6 @@ export default function StackNavigation() {
         initialRouteName={SCREENS.SPLASH_SCREEN}
         screenOptions={{
           headerShown: false,
-          // cardStyleInterpolator: CardStyleInterpolators.forFadeFromCenter,
         }}
       >
         <Stack.Screen

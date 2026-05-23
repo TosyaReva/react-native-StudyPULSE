@@ -109,14 +109,10 @@ const SettingsScreen = ({ navigation }) => {
 
   return (
     <ScreenComponent style={styles.container}>
-      {/* Header row */}
-      {/* <View style={styles.header}> */}
       <CustomText type="title" style={styles.categoryTitle}>
         Settings
       </CustomText>
-      {/* </View> */}
       <View style={styles.settingsContainersList}>
-        {/* General Settings */}
         <View style={styles.categoryContainer}>
           <CustomText type="subtitle" style={styles.categoryTitle}>
             General
@@ -137,7 +133,6 @@ const SettingsScreen = ({ navigation }) => {
             }
           />
         </View>
-        {/* Data Settings */}
         <View style={styles.categoryContainer}>
           <CustomText type="subtitle" style={styles.categoryTitle}>
             Data
@@ -167,10 +162,6 @@ const SettingsScreen = ({ navigation }) => {
 export default SettingsScreen;
 
 const styles = StyleSheet.create({
-  header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
   settingsContainersList: {
     gap: 40,
   },

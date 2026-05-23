@@ -12,11 +12,6 @@ export default function GradientContainer({ children, style, innerStyle }) {
       angle={45}
       angleCenter={{ x: 0.5, y: 0.5 }}
     >
-      {/*
-       * Inner View потрібен для iOS: LinearGradient не пропагує
-       * flex-стилі (alignItems, justifyContent) до дочірніх елементів.
-       * View бере на себе розподіл контенту всередині градієнту.
-       */}
       <View style={[styles.inner, innerStyle]}>
         {children}
       </View>
