@@ -1,42 +1,45 @@
+import React, { useCallback, useMemo } from 'react';
+import { Alert, FlatList } from 'react-native';
+import { useSelector } from 'react-redux';
 import CategoryItem from './CategoryItem';
-import { View, FlatList, StyleSheet, Text, StatusBar } from 'react-native';
+import SCREENS from '../constants/screens.js';
+import { selectActiveFocus } from '../redux/slices/focusSlice.js';
 
-const DATA = [
-  {
-    id: 'bd7acbea-c1b1-46c2-aed5-3ad53abb28ba',
-    title: 'React Native',
-    subtitle: '12h this week',
-    progress: 0.3,
-  },
-  {
-    id: '3ac68afc-c605-48d3-a4f8-fbd91aa97f63',
-    title: 'English',
-    subtitle: '5h this week',
-    progress: 0.7,
-  },
-  {
-    id: '58694a0f-3da1-471f-bd96-145571e29d72',
-    title: 'UI Design',
-    subtitle: '8h this week',
-    progress: 0.85,
-  },
-];
+export default function CategoryList({ data, navigation }) {
+  const activeFocus = useSelector(selectActiveFocus);
 
-export default function CategoryList() {
+  const handleOnPress = useCallback((item) => {
+    if (activeFocus.category && activeFocus.category.id !== item.id) {
+      Alert.alert(
+        'Focus already active',
+        'Only one focus can run at a time. Opening the active focus now.',
+      );
+      navigation.navigate(SCREENS.ACTIVE_CATEGORY, activeFocus.category);
+      return;
+    }
+
+    navigation.navigate(SCREENS.ACTIVE_CATEGORY, item);
+  }, [activeFocus.category, navigation]);
+
+  const contentContainerStyle = useMemo(() => ({ gap: 16 }), []);
+
+  const renderItem = useCallback(({ item }) => (
+    <CategoryItem
+      item={item}
+      title={item.title}
+      icon={item.icon}
+      color={item.color}
+      progress={item.progress}
+      onPress={handleOnPress}
+    />
+  ), [handleOnPress]);
+
   return (
     <FlatList
-      data={DATA}
-      renderItem={({ item }) => (
-        <CategoryItem
-          title={item.title}
-          subtitle={item.subtitle}
-          progress={item.progress}
-        />
-      )}
+      data={data}
+      renderItem={renderItem}
       keyExtractor={item => item.id}
-      contentContainerStyle={{ gap: 16 }}
+      contentContainerStyle={contentContainerStyle}
     />
   );
 }
-
-const styles = StyleSheet.create({});

@@ -1,8 +1,5 @@
-/**
- * @format
- */
-
 import { AppRegistry } from 'react-native';
+import './src/utils/ignoreWarnings';
 import App from './App';
 import { name as appName } from './app.json';
 

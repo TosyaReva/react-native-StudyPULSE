@@ -1,8 +1,24 @@
-import { View, StyleSheet, Platform } from 'react-native';
-import { COLORS } from '../constants/colors';
+import { View, StyleSheet } from 'react-native';
+import { useTheme } from '../context/ThemeContext';
+import shadowStyle from '../constants/shadowStyle';
 
 export default function Container({ children, style = {} }) {
-  return <View style={{ ...styles.container, ...style }}>{children}</View>;
+  const { themeColors } = useTheme();
+
+  return (
+    <View
+      style={[
+        styles.container,
+        {
+          backgroundColor: themeColors.surface,
+          borderColor: themeColors.border,
+        },
+        style,
+      ]}
+    >
+      {children}
+    </View>
+  );
 }
 
 const styles = StyleSheet.create({
@@ -12,21 +28,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
-    width: '100%',
-    backgroundColor: COLORS.white,
     borderRadius: 8,
     borderWidth: 1,
-    borderColor: 'rgba(0, 0, 0, 0.05)',
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.09,
-        shadowRadius: 1,
-      },
-      android: {
-        elevation: 2, // Тінь для Android
-      },
-    }),
+    ...shadowStyle,
   },
 });

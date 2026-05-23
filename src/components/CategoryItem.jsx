@@ -1,38 +1,69 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import Container from './Container';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import GradientContainer from './GradientContainer';
-import { COLORS } from '../constants/colors';
+import { useTheme } from '../context/ThemeContext';
+import Animated from 'react-native-reanimated';
+import { useScaleAnimation } from '../hooks/useScaleAnimation';
+import React from 'react';
 
-export default function CategoryItem({
-  progress = 0.5,
+const CategoryItem = React.memo(({
   title = 'title',
-  subtitle = 'subtitle',
-}) {
+  icon = 'local-fire-department',
+  color = '#000',
+  progress = 0,
+  item,
+  onPress,
+}) => {
+  const { themeColors } = useTheme();
+
+  const { animatedStyle, handlePressIn, handlePressOut } = useScaleAnimation(0.95);
+
+  const handlePress = () => {
+    if (onPress) {
+      onPress(item);
+    }
+  };
+
   return (
-    <Container style={style.mainContainer}>
-      <MaterialIcon name={'local-fire-department'} size={32} color="#000" />
-      <View style={style.containerCenter}>
-        <View style={style.containerText}>
-          <Text style={style.title}>{title}</Text>
-          <Text style={style.subtitle}>{subtitle}</Text>
-        </View>
-        {/*  progress bar */}
-        <View style={style.containerProgress}>
-          <GradientContainer
-            style={{
-              ...style.progressBar,
-              ...style.progressActive,
-              width: `${progress * 100}%`,
-            }}
-          ></GradientContainer>
-          <View style={{ ...style.progressBar, ...style.progressLeft }}></View>
-        </View>
-      </View>
-      <MaterialIcon name={'local-fire-department'} size={20} color={COLORS.secondaryText} />
-    </Container>
+    <Pressable
+      onPress={handlePress}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+    >
+      <Animated.View style={animatedStyle}>
+        <Container style={style.mainContainer}>
+          <MaterialIcon name={icon} size={32} color={color} />
+          <View style={style.containerCenter}>
+            <View style={style.containerText}>
+              <Text style={[style.title, { color: themeColors.primaryText }]}>{title}</Text>
+              <Text style={[style.subtitle, { color: themeColors.secondaryText }]}>Ready to focus</Text>
+            </View>
+            <View style={style.containerProgress}>
+              <GradientContainer
+                style={[
+                  style.progressBar,
+                  style.progressActive,
+                  { width: `${progress}%` },
+                ]}
+              />
+              <View
+                style={[
+                  style.progressBar,
+                  style.progressLeft,
+                  { backgroundColor: themeColors.background },
+                ]}
+              />
+            </View>
+          </View>
+          <MaterialIcon name="chevron-right" size={24} color={themeColors.secondaryText} />
+        </Container>
+      </Animated.View>
+    </Pressable>
   );
-}
+});
+
+export default CategoryItem;
 
 const style = StyleSheet.create({
   mainContainer: {
@@ -50,13 +81,11 @@ const style = StyleSheet.create({
   },
   title: {
     fontSize: 14,
-    fontWeight: 500,
-    color: COLORS.primaryText,
+    fontWeight: '500',
   },
   subtitle: {
     fontSize: 14,
-    fontWeight: 400,
-    color: COLORS.secondaryText,
+    fontWeight: '400',
   },
   containerProgress: {
     flexDirection: 'row',
@@ -66,12 +95,10 @@ const style = StyleSheet.create({
     height: 4,
   },
   progressActive: {
-    backgroundColor: COLORS.primaryText,
     borderRadius: 2,
   },
   progressLeft: {
     flex: 1,
-    backgroundColor: COLORS.background,
     borderRadius: 2,
   },
 });
