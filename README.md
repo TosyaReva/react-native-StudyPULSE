@@ -1,129 +1,208 @@
-# React Native — StudyPulse (Навігація & API)
+# StudyPulse
 
-Цей репозиторій містить виконання домашнього завдання з проектування навігаційної структури та інтеграції з REST API (Supabase) у застосунку React Native.
+[English version](./README.en.md)
 
-## 🎬 Демонстрація навігації
+StudyPulse - це React Native застосунок для планування навчальних або робочих фокус-сесій. Проєкт починався як MVP з категоріями активностей, а фінальна версія розширена до повнішого productivity app: з авторизацією, offline guest режимом, Pomodoro timer, статистикою, темною/світлою темою та налаштуваннями даних.
 
-![Navigation Demo iOS](./screenshots/navigation-ios.gif)
+## Демо
 
----
+- Google Drive відео-демо: `https://drive.google.com/file/d/1ulQB5PAchO3BxGQuBPNNN52ObsulkzLg/view?usp=sharing`
 
-## 📡 Інтеграція з API (Supabase)
+## Фінальні скріншоти
 
-Демонстрація завантаження списку категорій з бази даних через Axios:
+Ці місця залишені для фінальних скріншотів перед здачею проєкту.
 
-![Categories API Fetching Demo](./screenshots/CategoriesAPI.gif)
+| Екран                                          | Скріншот                                                             |
+| ---------------------------------------------- | -------------------------------------------------------------------- |
+| Splash, авторизація і вхід як гість            | ![Splash](./screenshots/finalScreenshots/final-splash-auth.webp)     |
+| Home з активною фокус-сесією                   | ![Home](./screenshots/finalScreenshots/final-home-active-focus.webp) |
+| Список категорій                               | ![Categories](./screenshots/finalScreenshots/final-categories.webp)  |
+| Pomodoro екран фокусу                          | ![Pomodoro](./screenshots/finalScreenshots/final-pomodoro.webp)      |
+| Статистика за день/тиждень/місяць              | ![Statistics](./screenshots/finalScreenshots/final-statistics.webp)  |
+| Налаштування, експорт, скидання даних і logout | ![Settings](./screenshots/finalScreenshots/final-settings.webp)      |
 
----
+## Наявні демо-матеріали
 
-## 🗺 Навігаційна структура
+Попередні демо-файли залишені в репозиторії як історія розвитку застосунку і додаткове підтвердження роботи навігації, списків, Redux та анімацій.
 
-```
+![Navigation demo](./screenshots/navigation-ios.gif)
+
+![Categories API demo](./screenshots/CategoriesAPI.gif)
+
+![Redux categories demo](./screenshots/ReduxCategories.gif)
+
+![Animation demo](./screenshots/animation.gif)
+
+## Основні можливості
+
+- Реєстрація і вхід через email/password у Supabase Auth.
+- Персональні дані користувача у Supabase таблицях із Row Level Security.
+- Offline guest mode з локальним MMKV сховищем, якщо користувач обирає режим гостя або Supabase недоступний.
+- Категорії для фокусу з власною назвою, іконкою і кольором.
+- Pomodoro timer з тривалістю 15, 25, 50 хвилин або custom значенням.
+- Тільки одна активна фокус-сесія одночасно; вона зберігається в Redux і не скидається після виходу з екрана.
+- Start, pause, resume і stop для трекінгу фокусу.
+- Збереження сесій зі статусами `completed` і `stopped`.
+- Home screen з прогресом за поточний день, активною сесією і швидким стартом фокусу.
+- Статистика за день, тиждень і місяць: загальний час фокусу, кількість сесій, графік, розподіл за категоріями, середня сесія, топ-категорія, найкраща година фокусу і streak.
+- Settings screen з dark/light mode, CSV export через native share sheet, reset data і logout.
+
+## Відповідність фінальному завданню
+
+### 1. Аналіз наявного застосунку
+
+Початковий MVP був сфокусований на навігації між категоріями і відображенні навчальних активностей. Фінальна версія залишає основний сценарій - обрати категорію і сфокусуватися на ній - але додає повніший продуктовий шар: авторизацію, персональні дані, offline режим, таймер і статистику.
+
+Ключові сценарії користувача:
+
+- Новий користувач реєструється і отримує дефолтні категорії.
+- Користувач, який повернувся, логіниться і бачить тільки власні категорії та фокус-сесії.
+- Користувач без доступу до мережі може продовжити як гість і зберігати дані локально.
+- Користувач запускає Pomodoro, ставить його на паузу, відновлює або зупиняє.
+- Користувач переглядає статистику фокусу за день, тиждень або місяць.
+- Користувач експортує або скидає власні дані у settings.
+
+Реалізовані зони розширення:
+
+- Backend і прив'язка даних до користувача через Supabase Auth, `user_id` та RLS.
+- Offline-first guest flow через MMKV.
+- Pomodoro і статистика як основні нові productivity функції.
+
+### 2. Розширення функціоналу
+
+Основна нова функціональність - Pomodoro flow. Екран активної категорії підтримує вибір тривалості, прогрес таймера, pause/resume, stop і збереження сесії. Home screen також розуміє, чи вже є активна фокус-сесія, і відкриває її замість створення дубліката.
+
+Backend розширено з mock/public data до authenticated user data. Категорії та focus sessions тепер прив'язані до конкретного Supabase користувача. Guest mode використовує локальне сховище і не синхронізується з Supabase, щоб поведінка MVP була передбачуваною.
+
+### 3. Рішення щодо state management
+
+Проєкт використовує і Redux Toolkit, і Context API, бо вони розв'язують різні задачі:
+
+- Redux Toolkit зберігає app data, яке використовується на багатьох екранах: auth mode, current user, categories, focus sessions і єдиний active focus timer.
+- Theme Context зберігає UI theme state, бо це легкий глобальний стан, який напряму потрібен візуальним компонентам.
+
+Такий поділ робить business data передбачуваними через Redux actions/selectors, а перемикання теми залишається простим для використання з будь-якого компонента.
+
+### 4. Компонентна структура і UX
+
+Застосунок організований на reusable components, screens, navigators, Redux slices, helpers, API functions і local storage helpers. Приклади reusable components: `Button`, `ButtonTimer`, `CategoryItem`, `CategoryList`, `DonutBar`, chart components, `RegistrationForm`, `ThemeToggle`, `Stat` і `UserAvatar`.
+
+Навігація побудована через:
+
+- Stack navigation для входу в застосунок і detail screens.
+- Drawer navigation для Home і Settings.
+- Bottom tabs для Home, Categories і Statistics.
+- Route params для відкриття обраної категорії на active focus screen.
+
+UX покращено через зрозуміліший settings screen, динамічний Home state, збереження активного фокусу, dark/light mode і розділені authenticated/guest flows.
+
+## Архітектура
+
+```text
 App
-└── StackNavigator
-    ├── SplashScreen              (вхідний екран, replace → HOME)
-    └── DrawerNavigator (HOME)
-        ├── TabNavigator
-        │   ├── HomeScreen        (головний екран)
-        │   └── CategoriesScreen  (список категорій)
-        └── ActiveCategoryScreen  (деталі категорії, route.params)
+|-- ThemeProvider
+|-- Redux Provider
+|-- StackNavigation
+    |-- SplashScreen
+    |-- DrawerNavigation
+        |-- Home tabs
+        |   |-- HomeScreen
+        |   |-- CategoriesScreen
+        |   |-- StatisticsScreen
+        |-- SettingsScreen
+    |-- ActiveCategoryScreen
+    |-- AddNewCategoryScreen
+|-- FocusTimerHost
 ```
 
-| Тип навігації      | Де використовується                      |
-| ------------------ | ---------------------------------------- |
-| `Stack.Navigator`  | Кореневий контейнер + перехід до деталей |
-| `Tab.Navigator`    | Головна / Категорії                      |
-| `Drawer.Navigator` | Бокове меню застосунку                   |
+Потік даних:
 
-### Передача даних між екранами
+```text
+Authenticated mode:
+React Native UI -> Redux thunks -> Supabase client -> Supabase tables with RLS
 
-- `CategoriesScreen → ActiveCategoryScreen` через `navigation.navigate(SCREENS.ACTIVE_CATEGORY, { ...task })`
-- `ActiveCategoryScreen` отримує дані через `route.params`
+Guest mode:
+React Native UI -> Redux thunks -> local repository functions -> MMKV
+```
 
----
+Важливі директорії:
 
-## 📱 Скриншоти компонентів
+- `src/api` - Supabase client і app data API.
+- `src/storage` - MMKV guest storage і Supabase auth storage adapter.
+- `src/redux/slices` - auth, categories, focus і sessions state.
+- `src/helpers` - statistics і CSV helpers.
+- `src/navigations` - Stack, Drawer і Tab navigation.
+- `src/screens` - основні екрани застосунку.
+- `src/components` - reusable UI components.
 
-**Android:**
+## Backend і база даних
 
-![Components](./screenshots/Components.webp)
-![Categories List](./screenshots/CategoriesList.webp)
+Основні таблиці:
 
-**iOS:**
+- `profiles` - один profile на Supabase Auth user.
+- `categories` - focus categories, які належать конкретному `user_id`.
+- `focus_sessions` - Pomodoro/focus history, яка належить конкретному `user_id` і може бути пов'язана з категорією.
 
-![Components IOS](./screenshots/ComponentsIOS.webp)
-![Categories List IOS](./screenshots/CategoriesListIOS.webp)
+Безпека:
 
----
+- Row Level Security увімкнено для user-owned tables.
+- Authenticated users мають доступ тільки до власних rows.
+- Guest mode не пише у Supabase і зберігає дані тільки на пристрої.
 
-## 🌍 Управління станом (Context API та Redux)
+Тестові дані:
 
-**Перемикач теми (Context API) та Управління категоріями (Redux Toolkit):**
+- Test user: `test@studypulse.local`
+- Password: `Password123!`
 
-- Демонстрація роботи світлої/темної теми, яка керується через глобальний Context API.
-- Робота з категоріями (завантаження та додавання) реалізована через Redux (`createAsyncThunk` + Supabase).
+## Запуск проєкту
 
-![Redux Categories Demo](./screenshots/ReduxCategories.gif)
+Встановити dependencies:
 
----
+```bash
+npm install
+```
 
-## 🛠 Реалізовані компоненти
+Встановити iOS pods:
 
-У проекті виділено та створено наступні ключові компоненти (`src/components/`):
+```bash
+cd ios
+pod install --repo-update
+cd ..
+```
 
-| Компонент      | Опис                                                               |
-| -------------- | ------------------------------------------------------------------ |
-| `Button`       | Кастомна кнопка (`Pressable` + градієнт через `GradientContainer`) |
-| `CategoryItem` | Картка категорії з `DonutBar` прогрес-індикатором                  |
-| `CategoryList` | Прокручуваний список (`FlatList`)                                  |
-| `SearchInput`  | Поле пошуку (`TextInput`)                                          |
-| `Stat`         | Статистика з векторними іконками (`react-native-vector-icons`)     |
-| `Container`    | Обгортка з нативними тінями (`Platform.select`)                    |
-| `RadioButton`  | Кнопка вибору з градієнтним бордером (`GradientBorder`)            |
-| `Logo`         | Адаптивне зображення (`useWindowDimensions`)                       |
+Запустити Metro:
 
----
+```bash
+npm start
+```
 
-## ✨ Особливості реалізації
+Запустити iOS:
 
-### Інтеграція з API (Supabase)
+```bash
+npm run ios
+```
 
-- **Кастомний бекенд:** Використання Supabase REST API для збереження та отримання категорій і фокус-сесій.
-- **Клієнт Axios:** Налаштований інстанс `axios` (`src/api/client.js`) з передачею API-ключів.
-- **Стан та завантаження:** Обробка станів завантаження (`ActivityIndicator`) та помилок мережі.
-- **Динамічний UI:** Рендеринг іконок та кольорів категорій з бази даних.
-- **Локальний пошук:** Миттєва фільтрація завантажених категорій без зайвих запитів.
+Запустити Android:
 
-### Архітектура та Навігація
+```bash
+npm run android
+```
 
-- **Модульність:** Навігаційні стеки та API запити рознесені у власні директорії (`src/navigations/`, `src/api/`).
-- **Константи екранів:** Унікальні ідентифікатори екранів та навігаторів (`DRAWER_ROOT`, `TAB_ROOT` тощо) для уникнення колізій імен.
-- **Передача параметрів:** `navigation.navigate()` + `route.params`.
-- **Стилізація навігації:** `headerShown: false`, кастомні анімації (`CardStyleInterpolators`).
-- **replace замість navigate:** `SplashScreen` видаляється зі стеку після переходу.
-- **Адаптивність:** `useWindowDimensions`, `Platform.select()`, `useSafeAreaInsets`.
-- **Чистота коду:** Кольори та назви екранів винесені у константи.
+## Перевірка якості
 
----
+Перевірена команда:
 
-## 🚀 Оптимізація та продуктивність
+```bash
+npm run lint
+```
 
-### Анімації
+Результат: lint проходить успішно.
 
-- Використано `react-native-reanimated` для створення плавної анімації масштабування (`scale`) при натисканні на `CategoryItem` та інші клікабельні елементи екрану. Анімація використовує `withSpring` для природної взаємодії, а логіку інкапсульовано в кастомний хук `useScaleAnimation`.
+## Нотатки для фінальної здачі
 
-![Плавні анімації](./screenshots/animation.gif)
-### Оптимізація ререндерів
+Фінальний проєкт покриває потрібні категорії:
 
-- **React.memo:** Компонент `CategoryItem` обгорнуто в `React.memo`, щоб уникнути зайвих перемалювань при оновленні списку.
-- **useCallback & useMemo:** В `CategoryList` функції-обробники (`handleOnPress`, `renderItem`) обгорнуто в `useCallback`, а стилі – в `useMemo`. Це вирішує поширену проблему продуктивності `FlatList`, коли інлайн-функції спричиняють ререндер усіх елементів.
-
-### Аналіз бандлу
-
-Проведено аналіз розміру бандлу за допомогою `react-native-bundle-visualizer`. Важких або непотрібних залежностей (наприклад, `moment`, `lodash`) не виявлено, всі встановлені пакети є оптимальними та необхідними для роботи. Заміна не проводилась, оскільки бандл вже оптимізований. Частина `[unmapped]` становить типові для React Native ~20% і відноситься до внутрішнього рантайму Metro Bundler.
-
-![Аналіз бандлу](./screenshots/bundle_visualizer.png)
-
----
-
-_Домашнє завдання виконано в рамках курсу по React Native._
+- Функціональність: auth, guest/offline mode, Pomodoro, statistics, settings actions.
+- Модульність: screens, components, API layer, storage helpers, Redux slices і helpers розділені.
+- State management: Redux Toolkit використовується для app data, Theme Context - для UI theme.
+- Документація: цей README описує впроваджені зміни, логіку рішень, setup steps і screenshot placeholders.

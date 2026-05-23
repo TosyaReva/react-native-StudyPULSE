@@ -14,7 +14,7 @@ export default function ButtonTimer({
   const { themeColors } = useTheme();
   const color = isActive ? COLORS.brand : themeColors.secondaryText;
   return (
-    <Pressable onPress={onPress} style={{ flex: 1 }}>
+    <Pressable onPress={onPress} style={styles.button}>
       <Container style={styles.container}>
         <MaterialIcon name={icon} size={32} color={color} />
         <Text style={isActive ? styles.titleActive : [styles.title, { color: themeColors.secondaryText }]}>
@@ -29,6 +29,9 @@ const styles = StyleSheet.create({
   container: {
     gap: 16,
     justifyContent: 'flex-start',
+  },
+  button: {
+    flex: 1,
   },
   titleActive: {
     color: COLORS.brand,

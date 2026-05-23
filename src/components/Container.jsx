@@ -1,4 +1,4 @@
-import { View, StyleSheet, Platform } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
 import shadowStyle from '../constants/shadowStyle';
 

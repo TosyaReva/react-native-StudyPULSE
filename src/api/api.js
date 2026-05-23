@@ -1,90 +1,265 @@
-/**
- *
- *   GET /categories → list all categories
- *   GET /categories?id=eq.<id>  → single category
- *   GET /focus_sessions → list sessions (with ordering)
- *   POST /focus_sessions → create a new session
- */
+import supabase, { isSupabaseReachable } from './client';
+import { DEFAULT_CATEGORIES } from '../constants/defaultCategories';
+import {
+  createLocalCategory,
+  createLocalSession,
+  getLocalCategories,
+  getLocalSessions,
+  resetLocalData,
+} from '../storage/localDatabase';
 
-import client from './client';
+const requireUser = async () => {
+  const {
+    data: { user },
+    error,
+  } = await supabase.auth.getUser();
 
-/**
- * Fetch all categories ordered alphabetically.
- * @returns {Promise<Array>} list of category objects
- */
-export const fetchCategories = async () => {
-  // order=title.asc tells PostgREST to sort by the title column
-  const response = await client.get('/categories', {
-    params: { order: 'title.asc' },
-  });
-  return response.data; // axios puts the parsed body in .data
-};
-
-/**
- * Create a new category.
- * @param {Object} category
- * @param {string} category.title
- * @param {string} category.icon
- * @param {string} category.color
- * @returns {Promise<Object>} the created category object
- */
-export const createCategory = async ({ title, icon, color }) => {
-  const response = await client.post('/categories', {
-    title,
-    icon,
-    color,
-  });
-  return Array.isArray(response.data) ? response.data[0] : response.data;
-};
-
-/**
- * Fetch a single category by its UUID.
- * @param {string} id — category UUID
- * @returns {Promise<Object>} category object
- */
-export const fetchCategoryById = async (id) => {
-  // PostgREST horizontal filtering: ?id=eq.<value>
-  const response = await client.get('/categories', {
-    params: { id: `eq.${id}` },
-    headers: {
-      // Ask PostgREST for a single object instead of an array
-      Accept: 'application/vnd.pgrst.object+json',
-    },
-  });
-  return response.data;
-};
-
-/**
- * Fetch all focus sessions, newest first.
- * Optionally filter by category.
- *
- * @param {Object} options
- * @param {string} [options.categoryId] — filter by category UUID
- * @returns {Promise<Array>} list of session objects
- */
-export const fetchSessions = async ({ categoryId } = {}) => {
-  const params = { order: 'completed_at.desc' };
-
-  if (categoryId) {
-    params.category_id = `eq.${categoryId}`;
+  if (error) {
+    throw error;
   }
 
-  const response = await client.get('/focus_sessions', { params });
-  return response.data;
+  if (!user) {
+    throw new Error('User is not authenticated');
+  }
+
+  return user;
 };
 
-/**
- * Save a newly completed focus session.
- *
- * @param {Object} session
- * @param {string} session.category_id  — UUID of the chosen category
- * @param {number} session.duration_min — duration in minutes (integer)
- * @returns {Promise<Object>} the created session object
- */
-export const createSession = async ({ category_id, duration_min }) => {
-  const response = await client.post('/focus_sessions', {
-    category_id,
-    duration_min,
+export const getCurrentSession = async () => {
+  const { data, error } = await supabase.auth.getSession();
+
+  if (error) {
+    throw error;
+  }
+
+  return data.session;
+};
+
+export const checkSupabaseConnection = isSupabaseReachable;
+
+export const signUpUser = async ({ email, password, displayName }) => {
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        display_name: displayName,
+      },
+    },
   });
-  return Array.isArray(response.data) ? response.data[0] : response.data;
+
+  if (error) {
+    throw error;
+  }
+
+  if (!data.session) {
+    const signInResponse = await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+    if (signInResponse.error) {
+      throw signInResponse.error;
+    }
+  }
+
+  await bootstrapAuthenticatedUser(displayName);
+
+  return getCurrentSession();
+};
+
+export const signInUser = async ({ email, password }) => {
+  const { data, error } = await supabase.auth.signInWithPassword({
+    email,
+    password,
+  });
+
+  if (error) {
+    throw error;
+  }
+
+  await bootstrapAuthenticatedUser();
+
+  return data.session;
+};
+
+export const signOutUser = async () => {
+  const { error } = await supabase.auth.signOut();
+
+  if (error) {
+    throw error;
+  }
+};
+
+export const bootstrapAuthenticatedUser = async displayName => {
+  const user = await requireUser();
+
+  const { error: profileError } = await supabase.from('profiles').upsert(
+    {
+      id: user.id,
+      display_name:
+        displayName ||
+        user.user_metadata?.display_name ||
+        user.email?.split('@')[0] ||
+        'StudyPulse User',
+    },
+    { onConflict: 'id' },
+  );
+
+  if (profileError) {
+    throw profileError;
+  }
+
+  const { count, error: countError } = await supabase
+    .from('categories')
+    .select('id', { count: 'exact', head: true });
+
+  if (countError) {
+    throw countError;
+  }
+
+  if (count === 0) {
+    const { error } = await supabase.from('categories').insert(
+      DEFAULT_CATEGORIES.map(category => ({
+        ...category,
+        user_id: user.id,
+      })),
+    );
+
+    if (error) {
+      throw error;
+    }
+  }
+};
+
+export const fetchCategories = async ({ mode } = {}) => {
+  if (mode === 'guest') {
+    return getLocalCategories();
+  }
+
+  const { data, error } = await supabase
+    .from('categories')
+    .select('*')
+    .order('title', { ascending: true });
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+};
+
+export const createCategory = async ({ title, icon, color, mode }) => {
+  if (mode === 'guest') {
+    return createLocalCategory({ title, icon, color });
+  }
+
+  const user = await requireUser();
+  const { data, error } = await supabase
+    .from('categories')
+    .insert({
+      title,
+      icon,
+      color,
+      user_id: user.id,
+    })
+    .select()
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+};
+
+export const fetchSessions = async ({ categoryId, mode } = {}) => {
+  if (mode === 'guest') {
+    return getLocalSessions({ categoryId });
+  }
+
+  let query = supabase
+    .from('focus_sessions')
+    .select('*, categories(title, color, icon)')
+    .order('ended_at', { ascending: false });
+
+  if (categoryId) {
+    query = query.eq('category_id', categoryId);
+  }
+
+  const { data, error } = await query;
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+};
+
+export const createSession = async ({
+  category_id,
+  planned_duration_min,
+  focused_seconds,
+  status,
+  started_at,
+  ended_at,
+  mode,
+}) => {
+  const payload = {
+    category_id,
+    planned_duration_min,
+    focused_seconds,
+    status,
+    started_at,
+    ended_at,
+  };
+
+  if (mode === 'guest') {
+    return createLocalSession(payload);
+  }
+
+  const user = await requireUser();
+  const { data, error } = await supabase
+    .from('focus_sessions')
+    .insert({
+      ...payload,
+      user_id: user.id,
+    })
+    .select()
+    .single();
+
+  if (error) {
+    throw error;
+  }
+
+  return data;
+};
+
+export const resetAllData = async ({ mode } = {}) => {
+  if (mode === 'guest') {
+    resetLocalData();
+    return;
+  }
+
+  const user = await requireUser();
+
+  const { error: sessionsError } = await supabase
+    .from('focus_sessions')
+    .delete()
+    .eq('user_id', user.id);
+
+  if (sessionsError) {
+    throw sessionsError;
+  }
+
+  const { error: categoriesError } = await supabase
+    .from('categories')
+    .delete()
+    .eq('user_id', user.id);
+
+  if (categoriesError) {
+    throw categoriesError;
+  }
+
+  await bootstrapAuthenticatedUser();
 };

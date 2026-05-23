@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import React from 'react';
 import Container from '../Container';
 import CustomText from '../CustomText';
@@ -15,14 +15,19 @@ const mockData = [
   { value: 300, label: 'S' },
 ];
 
-const BarChartComponent = ({ data = mockData, styleContainer }) => {
+const BarChartComponent = ({
+  data = mockData,
+  styleContainer,
+  totalLabel = '5h 40m',
+  periodLabel = 'This week',
+}) => {
   return (
     <Container style={[styles.container, styleContainer]}>
       <View style={styles.header}>
         <CustomText type="title" style={styles.title}>
-          5h 40m
+          {totalLabel}
         </CustomText>
-        <CustomText>focused This week</CustomText>
+        <CustomText>focused {periodLabel}</CustomText>
       </View>
       <BarChart
         data={data}

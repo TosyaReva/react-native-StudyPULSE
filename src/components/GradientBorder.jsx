@@ -14,7 +14,7 @@ export default function GradientBorder({
   style,
 }) {
   return (
-    <View style={[{ borderRadius, overflow: 'hidden', padding: borderWidth }, style]}>
+    <View style={[styles.container, { borderRadius, padding: borderWidth }, style]}>
       <LinearGradient
         colors={[COLORS.gradientStart, COLORS.gradientEnd]}
         start={{ x: 0, y: 0 }}
@@ -25,3 +25,9 @@ export default function GradientBorder({
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    overflow: 'hidden',
+  },
+});

@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native';
-import React from 'react';
+import { StyleSheet, View } from 'react-native';
+import React, { useCallback } from 'react';
 import Container from '../Container';
 import CustomText from '../CustomText';
 import { PieChart } from 'react-native-gifted-charts';
@@ -39,34 +39,36 @@ const mockData = [
   },
 ];
 
-const DonutChartComponent = ({ data = mockData, styleContainer }) => {
+const CenterLabel = ({ totalLabel }) => (
+  <View style={styles.centerLabel}>
+    <CustomText type="title">{totalLabel}</CustomText>
+    <CustomText>total</CustomText>
+  </View>
+);
+
+const DonutChartComponent = ({
+  data = mockData,
+  styleContainer,
+  totalLabel = '5h 40m',
+}) => {
+  const renderCenterLabel = useCallback(
+    () => <CenterLabel totalLabel={totalLabel} />,
+    [totalLabel],
+  );
+
   const renderLegend = ({ label, value, color }) => {
     return (
       <View
-        style={{
-          flexDirection: 'row',
-          marginBottom: 12,
-          gap: 8,
-          justifyContent: 'space-between',
-        }}
+        key={label || color || value}
+        style={styles.legendItem}
       >
-        <View
-          style={{
-            flexDirection: 'row',
-          }}
-        >
+        <View style={styles.legendTitle}>
           <View
-            style={{
-              height: 18,
-              width: 18,
-              marginRight: 10,
-              borderRadius: 90,
-              backgroundColor: color || 'white',
-            }}
+            style={[styles.legendColor, { backgroundColor: color || 'white' }]}
           />
           <CustomText type="text">{label || ''}</CustomText>
         </View>
-        <CustomText type="text">{value + '%' || '0%'}</CustomText>
+        <CustomText type="text">{value ? `${value}%` : '0%'}</CustomText>
       </View>
     );
   };
@@ -87,14 +89,7 @@ const DonutChartComponent = ({ data = mockData, styleContainer }) => {
           strokeColor="#FFFFFF"
           strokeWidth={4}
           // innerCircleColor={'#232B5D'}
-          centerLabelComponent={() => {
-            return (
-              <View style={{ justifyContent: 'center', alignItems: 'center' }}>
-                <CustomText type="title">5h 40m</CustomText>
-                <CustomText>total</CustomText>
-              </View>
-            );
-          }}
+          centerLabelComponent={renderCenterLabel}
         />
         <View style={styles.legendConteiner}>
           {data.map(item => renderLegend(item))}
@@ -108,7 +103,26 @@ export default DonutChartComponent;
 
 const styles = StyleSheet.create({
   container: { flexDirection: 'column' },
-  header: { alignSelf: 'flex-start' },
+  header: { alignSelf: 'flex-start', marginBottom: 16 },
   chart: { flexDirection: 'row', gap: 16, justifyContent: 'center' },
   legendConteiner: { gap: 8 },
+  legendItem: {
+    flexDirection: 'row',
+    marginBottom: 12,
+    gap: 8,
+    justifyContent: 'space-between',
+  },
+  legendTitle: {
+    flexDirection: 'row',
+  },
+  legendColor: {
+    height: 18,
+    width: 18,
+    marginRight: 10,
+    borderRadius: 90,
+  },
+  centerLabel: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });

@@ -4,14 +4,18 @@ import GradientBorder from './GradientBorder';
 import Animated from 'react-native-reanimated';
 import { useScaleAnimation } from '../hooks/useScaleAnimation';
 
+const ActiveWrapper = ({ children }) => (
+  <GradientBorder borderWidth={1.5} borderRadius={8}>
+    {children}
+  </GradientBorder>
+);
+
+const DefaultWrapper = ({ children }) => <>{children}</>;
+
 export default function RadioButton({
   title = 'value',
   isActive,
-  onPress = () => {
-    try {
-      console.log('Pressed');
-    } catch (error) {}
-  },
+  onPress = () => {},
   children,
   style,
   containerStyle,
@@ -19,14 +23,7 @@ export default function RadioButton({
   const { animatedStyle, handlePressIn, handlePressOut } =
     useScaleAnimation(0.95);
 
-  const Wrapper = ({ children }) =>
-    isActive ? (
-      <GradientBorder borderWidth={1.5} borderRadius={8}>
-        {children}
-      </GradientBorder>
-    ) : (
-      <>{children}</>
-    );
+  const Wrapper = isActive ? ActiveWrapper : DefaultWrapper;
   return (
     <Pressable
       onPress={() => onPress(title)}

@@ -6,9 +6,25 @@ import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { COLORS } from '../constants/colors.js';
 import { Platform } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
-console.log(StatisticsScreen);
 
 const Tab = createBottomTabNavigator();
+
+const iconProps = {
+  [SCREENS.HOME]: 'fmd-good',
+  [SCREENS.CATEGORY]: 'commute',
+  [SCREENS.STATISTICS]: 'bookmark',
+};
+
+const createTabIcon = routeName =>
+  function TabIcon({ color, size }) {
+    return (
+      <MaterialIcon name={iconProps[routeName]} size={size} color={color} />
+    );
+  };
+
+const HomeIcon = createTabIcon(SCREENS.HOME);
+const CategoriesIcon = createTabIcon(SCREENS.CATEGORY);
+const StatisticsIcon = createTabIcon(SCREENS.STATISTICS);
 
 export default function TabNavigation() {
   const { theme, themeColors } = useTheme();
@@ -16,8 +32,8 @@ export default function TabNavigation() {
   return (
     <Tab.Navigator
       initialRouteName={SCREENS.HOME}
-      sceneContainerStyle={{ backgroundColor: 'transparent' }}
-      screenOptions={({ route }) => ({
+      sceneContainerStyle={styles.sceneContainer}
+      screenOptions={{
         sceneStyle: {},
         headerShown: false,
         tabBarStyle: {
@@ -45,26 +61,31 @@ export default function TabNavigation() {
         tabBarItemStyle: {
           flex: 1,
         },
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-
-          if (route.name === SCREENS.HOME) {
-            iconName = 'fmd-good';
-          } else if (route.name === SCREENS.CATEGORY) {
-            iconName = 'commute';
-          } else if (route.name === SCREENS.STATISTICS) {
-            iconName = 'bookmark';
-          }
-
-          return <MaterialIcon name={iconName} size={size} color={color} />;
-        },
         tabBarActiveTintColor: COLORS.brand,
         tabBarInactiveTintColor: themeColors.secondaryText,
-      })}
+      }}
     >
-      <Tab.Screen name={SCREENS.HOME} component={HomeScreen} />
-      <Tab.Screen name={SCREENS.CATEGORY} component={CategoriesScreen} />
-      <Tab.Screen name={SCREENS.STATISTICS} component={StatisticsScreen} />
+      <Tab.Screen
+        name={SCREENS.HOME}
+        component={HomeScreen}
+        options={{ tabBarIcon: HomeIcon }}
+      />
+      <Tab.Screen
+        name={SCREENS.CATEGORY}
+        component={CategoriesScreen}
+        options={{ tabBarIcon: CategoriesIcon }}
+      />
+      <Tab.Screen
+        name={SCREENS.STATISTICS}
+        component={StatisticsScreen}
+        options={{ tabBarIcon: StatisticsIcon }}
+      />
     </Tab.Navigator>
   );
 }
+
+const styles = {
+  sceneContainer: {
+    backgroundColor: 'transparent',
+  },
+};

@@ -1,4 +1,4 @@
-import { View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 
 import LinearGradient from 'react-native-linear-gradient';
 import { COLORS } from '../constants/colors';
@@ -17,9 +17,18 @@ export default function GradientContainer({ children, style, innerStyle }) {
        * flex-стилі (alignItems, justifyContent) до дочірніх елементів.
        * View бере на себе розподіл контенту всередині градієнту.
        */}
-      <View style={[{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: 8 }, innerStyle]}>
+      <View style={[styles.inner, innerStyle]}>
         {children}
       </View>
     </LinearGradient>
   );
 }
+
+const styles = StyleSheet.create({
+  inner: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+  },
+});

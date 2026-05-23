@@ -7,9 +7,10 @@ import { fetchCategories, createCategory } from '../../api/api';
 
 export const fetchCategoriesAsync = createAsyncThunk(
   'categories/fetchCategories',
-  async (_, { rejectWithValue }) => {
+  async (_, { getState, rejectWithValue }) => {
     try {
-      const data = await fetchCategories();
+      const { mode } = getState().auth;
+      const data = await fetchCategories({ mode });
       return data;
     } catch (error) {
       return rejectWithValue(error.message || 'Failed to fetch categories');
@@ -19,9 +20,10 @@ export const fetchCategoriesAsync = createAsyncThunk(
 
 export const addCategoryAsync = createAsyncThunk(
   'categories/addCategory',
-  async (categoryData, { rejectWithValue }) => {
+  async (categoryData, { getState, rejectWithValue }) => {
     try {
-      const newCategory = await createCategory(categoryData);
+      const { mode } = getState().auth;
+      const newCategory = await createCategory({ ...categoryData, mode });
       return newCategory;
     } catch (error) {
       return rejectWithValue(error.message || 'Failed to add category');

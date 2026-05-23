@@ -13,7 +13,7 @@ export default function AddNewCategoryScreen({ navigation, route }) {
   const { animatedStyle: animatedClose, handlePressIn, handlePressOut } = useScaleAnimation(0.85);
 
   return (
-    <ScreenComponent style={{ marginTop: 40 }}>
+    <ScreenComponent style={styles.screen}>
       {/* Header */}
       <View>
         <View style={styles.header}>
@@ -47,6 +47,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
+  },
+  screen: {
+    marginTop: 40,
   },
   backButton: {
     alignSelf: 'flex-start',

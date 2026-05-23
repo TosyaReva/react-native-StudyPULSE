@@ -42,13 +42,19 @@ const CategoryItem = React.memo(({
             {/*  progress bar */}
             <View style={style.containerProgress}>
               <GradientContainer
-                style={{
-                  ...style.progressBar,
-                  ...style.progressActive,
-                  width: `${progress}%`,
-                }}
-              ></GradientContainer>
-              <View style={{ ...style.progressBar, ...style.progressLeft, backgroundColor: themeColors.background }}></View>
+                style={[
+                  style.progressBar,
+                  style.progressActive,
+                  { width: `${progress}%` },
+                ]}
+              />
+              <View
+                style={[
+                  style.progressBar,
+                  style.progressLeft,
+                  { backgroundColor: themeColors.background },
+                ]}
+              />
             </View>
           </View>
           <MaterialIcon name="chevron-right" size={24} color={themeColors.secondaryText} />

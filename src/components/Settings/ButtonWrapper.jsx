@@ -1,13 +1,21 @@
-import { StyleSheet, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import React from 'react';
 import shadowStyle from '../../constants/shadowStyle';
 import { COLORS } from '../../constants/colors';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import CustomText from '../CustomText';
 
-const ButtonWrapper = ({ icon, title, rightElement }) => {
+const ButtonWrapper = ({ icon, title, rightElement, onPress, disabled = false }) => {
   return (
-    <View style={styles.container}>
+    <Pressable
+      disabled={disabled || !onPress}
+      onPress={onPress}
+      style={({ pressed }) => [
+        styles.container,
+        pressed && styles.containerPressed,
+        disabled && styles.containerDisabled,
+      ]}
+    >
       <View style={styles.content}>
         {icon && (
           <MaterialIcon
@@ -20,7 +28,7 @@ const ButtonWrapper = ({ icon, title, rightElement }) => {
         {title && <CustomText style={styles.titleText}>{title}</CustomText>}
       </View>
       {rightElement}
-    </View>
+    </Pressable>
   );
 };
 
@@ -36,6 +44,12 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingLeft: 20,
+  },
+  containerPressed: {
+    opacity: 0.75,
+  },
+  containerDisabled: {
+    opacity: 0.5,
   },
   content: {
     flexDirection: 'row',

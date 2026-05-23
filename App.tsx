@@ -15,6 +15,7 @@ import {
   SafeAreaProvider,
 } from 'react-native-safe-area-context';
 import StackNavigation from './src/navigations/StackNavigation';
+import FocusTimerHost from './src/components/FocusTimerHost';
 
 import { ThemeProvider } from './src/context/ThemeContext';
 import { Provider } from 'react-redux';
@@ -38,6 +39,7 @@ function App() {
 function AppContent() {
   return (
     <View style={styles.container}>
+      <FocusTimerHost />
       <StackNavigation />
     </View>
   );

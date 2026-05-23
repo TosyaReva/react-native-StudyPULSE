@@ -1,4 +1,4 @@
-import { Pressable } from 'react-native';
+import { Pressable, StyleSheet } from 'react-native';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { useTheme } from '../context/ThemeContext';
 import Animated from 'react-native-reanimated';
@@ -14,7 +14,7 @@ export default function ThemeToggle() {
       onPress={toggleTheme} 
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      style={{ marginRight: 20 }}
+      style={styles.button}
     >
       <Animated.View style={animatedStyle}>
         <MaterialIcon
@@ -26,3 +26,9 @@ export default function ThemeToggle() {
     </Pressable>
   );
 }
+
+const styles = StyleSheet.create({
+  button: {
+    marginRight: 20,
+  },
+});

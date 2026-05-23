@@ -25,7 +25,14 @@ export default function DrawerNavigation() {
         },
       }}
     >
-      <Drawer.Screen name={SCREENS.TAB_ROOT} component={TabNavigation} />
+      <Drawer.Screen
+        name={SCREENS.TAB_ROOT}
+        component={TabNavigation}
+        options={{
+          drawerLabel: 'Home',
+          title: 'Home',
+        }}
+      />
       <Drawer.Screen name={SCREENS.SETTINGS} component={SettingsScreen} />
     </Drawer.Navigator>
   );

@@ -1,5 +1,6 @@
-import { View, Text, StyleSheet } from 'react-native';
-import React from 'react';
+import { ActivityIndicator, View, StyleSheet } from 'react-native';
+import React, { useCallback, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import Logo from '../components/Logo';
 import CustomText from '../components/CustomText';
 import { COLORS } from '../constants/colors';
@@ -7,9 +8,47 @@ import Button from '../components/Button';
 import RegistrationForm from '../components/RegistrationForm';
 import SCREENS from '../constants/screens';
 import ScreenComponent from './ScreenComponent.jsx';
+import {
+  continueAsGuestAsync,
+  initializeAuthAsync,
+  selectAuthInitializing,
+  selectAuthMode,
+} from '../redux/slices/authSlice';
 
 export default function SplashScreen({ navigation }) {
-  const navigateToHome = () => navigation.replace(SCREENS.DRAWER_ROOT);
+  const dispatch = useDispatch();
+  const mode = useSelector(selectAuthMode);
+  const initializing = useSelector(selectAuthInitializing);
+  const navigateToHome = useCallback(
+    () => navigation.replace(SCREENS.DRAWER_ROOT),
+    [navigation],
+  );
+
+  useEffect(() => {
+    dispatch(initializeAuthAsync());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (mode) {
+      navigateToHome();
+    }
+  }, [mode, navigateToHome]);
+
+  const handleGuest = () => {
+    dispatch(continueAsGuestAsync())
+      .unwrap()
+      .then(navigateToHome)
+      .catch(() => {});
+  };
+
+  if (initializing) {
+    return (
+      <ScreenComponent style={styles.loadingContainer}>
+        <ActivityIndicator color={COLORS.brand} size="large" />
+      </ScreenComponent>
+    );
+  }
+
   return (
     <ScreenComponent style={styles.container}>
       <View style={styles.containerTop}>
@@ -25,18 +64,12 @@ export default function SplashScreen({ navigation }) {
           Pomodoro timer for students, coders and creators.
         </CustomText>
       </View>
-      <RegistrationForm />
+      <RegistrationForm onSuccess={navigateToHome} />
       <View style={styles.containerButtons}>
-        <Button
-          title="Get Started"
-          primary
-          style={styles.button}
-          onPress={navigateToHome}
-        />
         <Button
           title="Continue as Guest"
           style={styles.button}
-          onPress={navigateToHome}
+          onPress={handleGuest}
         />
       </View>
     </ScreenComponent>
@@ -48,9 +81,14 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   containerTop: {
     alignItems: 'center',
-    marginBottom: 165,
+    marginBottom: 40,
   },
   title: {
     flexDirection: 'row',

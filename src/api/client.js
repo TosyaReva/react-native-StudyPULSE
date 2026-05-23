@@ -1,20 +1,32 @@
-import axios from 'axios';
+import 'react-native-url-polyfill/auto';
+import { createClient } from '@supabase/supabase-js';
+import { authStorage } from '../storage/localDatabase';
 
 const SUPABASE_URL = 'https://dptawlxaoydtvmfgzrpz.supabase.co';
 const SUPABASE_ANON_KEY =
-  'sb_publishable_r3XQPHoqnIwuLw4xgcMUbA_zqTzrBYn'; // It is a Public Key
+  'sb_publishable_r3XQPHoqnIwuLw4xgcMUbA_zqTzrBYn';
 
-// Base URL for the PostgREST auto-generated REST API
-const API_BASE_URL = `${SUPABASE_URL}/rest/v1`;
-
-const client = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    apikey: SUPABASE_ANON_KEY,
-    Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
-    'Content-Type': 'application/json',
-    Prefer: 'return=representation',
+const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: {
+    storage: authStorage,
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: false,
   },
 });
 
-export default client;
+export const isSupabaseReachable = async () => {
+  try {
+    await fetch(`${SUPABASE_URL}/auth/v1/health`, {
+      headers: {
+        apikey: SUPABASE_ANON_KEY,
+      },
+    });
+
+    return true;
+  } catch (error) {
+    return false;
+  }
+};
+
+export default supabase;

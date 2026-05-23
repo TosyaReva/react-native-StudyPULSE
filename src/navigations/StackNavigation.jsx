@@ -1,12 +1,8 @@
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
-import {
-  createStackNavigator,
-  CardStyleInterpolators,
-} from '@react-navigation/stack';
+import { createStackNavigator } from '@react-navigation/stack';
 import {
   SplashScreen,
   AddNewCategoryScreen,
-  UI_kit,
   ActiveCategoryScreen,
 } from '../screens';
 import DrawerNavigation from './DrawerNavigation.jsx';

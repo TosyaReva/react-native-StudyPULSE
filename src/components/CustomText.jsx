@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { COLORS } from '../constants/colors';
 import { useTheme } from '../context/ThemeContext';
 
@@ -14,11 +14,6 @@ export default function CustomText({ type = 'subtitle', children, style }) {
 }
 
 const styles = StyleSheet.create({
-  mainTitle: {
-    fontSize: 48,
-    color: COLORS.primaryText,
-    fontWeight: 700,
-  },
   mainTitle: {
     fontSize: 48,
     color: COLORS.primaryText,

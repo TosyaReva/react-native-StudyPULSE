@@ -1,5 +1,5 @@
-import { View, StyleSheet, Pressable, Text, ScrollView, Alert } from 'react-native';
-import { useState } from 'react';
+import { Alert, Pressable, ScrollView, StyleSheet, View } from 'react-native';
+import { useMemo, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigation } from '@react-navigation/native';
 import { addCategoryAsync } from '../../redux/slices/categoriesSlice';
@@ -24,6 +24,18 @@ import { useScaleAnimation } from '../../hooks/useScaleAnimation';
 
 const ColorItem = ({ color, isSelected, onPress }) => {
   const { animatedStyle, handlePressIn, handlePressOut } = useScaleAnimation(0.85);
+  const colorStyles = useMemo(
+    () =>
+      StyleSheet.create({
+        border: {
+          borderColor: color,
+        },
+        fill: {
+          backgroundColor: color,
+        },
+      }),
+    [color],
+  );
 
   return (
     <Pressable
@@ -34,14 +46,11 @@ const ColorItem = ({ color, isSelected, onPress }) => {
       <Animated.View
         style={[
           styles.colorItem,
-          {
-            borderColor: isSelected ? color : 'transparent',
-            borderWidth: 1,
-          },
+          isSelected ? colorStyles.border : styles.transparentBorder,
           animatedStyle,
         ]}
       >
-        <View style={[{ backgroundColor: color, flex: 1, borderRadius: 90 }]}></View>
+        <View style={[styles.colorInner, colorStyles.fill]} />
       </Animated.View>
     </Pressable>
   );
@@ -95,7 +104,7 @@ export default function AddNewCategoryForm() {
           ))}
         </ScrollView>
       </View>
-      <View style={[styles.formItem]}>
+      <View style={styles.formItem}>
         <CustomText type="title">Choose Color</CustomText>
         <View style={styles.listColor}>
           {COLORS.iconColors.map(color => (
@@ -125,10 +134,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   colorItem: {
-    // flex: 1,
     width: 64,
     height: 64,
     padding: 4,
+    borderWidth: 1,
+  },
+  transparentBorder: {
+    borderColor: 'transparent',
+  },
+  colorInner: {
+    flex: 1,
+    borderRadius: 90,
   },
   formItem: {
     gap: 8,

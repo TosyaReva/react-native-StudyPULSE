@@ -1,33 +1,57 @@
-import { View, Text, StyleSheet, ScrollView } from 'react-native';
-import React, { useState } from 'react';
+import { ActivityIndicator, View, Text, StyleSheet, ScrollView } from 'react-native';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import RadioButton from '../components/RadioButton';
 import ScreenComponent from './ScreenComponent';
-import ButtonPlusCircle from '../components/ButtonPlusCircle';
 import CustomText from '../components/CustomText';
 import BarChart from '../components/Charts/BarChartComponent';
 import DonutChartComponent from '../components/Charts/DonutChartComponent';
 import capitalize from '../helpers/capitalize';
 import { COLORS } from '../constants/colors';
 import Container from '../components/Container';
-import SumUp from '../components/SumUp';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import shadowStyle from '../constants/shadowStyle';
+import { fetchSessionsAsync, selectAllSessions, selectSessionsLoading } from '../redux/slices/sessionsSlice';
+import { fetchCategoriesAsync, selectAllCategories } from '../redux/slices/categoriesSlice';
+import { buildStatistics } from '../helpers/statistics';
 
 const innerTabs = ['day', 'week', 'month'];
+const periodLabels = {
+  day: 'today',
+  week: 'this week',
+  month: 'this month',
+};
 
 export default function StatisticsScreen({ navigation }) {
+  const dispatch = useDispatch();
   const [tab, setTab] = useState(innerTabs[1]);
+  const sessions = useSelector(selectAllSessions);
+  const categories = useSelector(selectAllCategories);
+  const loading = useSelector(selectSessionsLoading);
+  const statistics = useMemo(
+    () => buildStatistics({ sessions, categories, period: tab }),
+    [sessions, categories, tab],
+  );
+
+  useEffect(() => {
+    dispatch(fetchSessionsAsync());
+    dispatch(fetchCategoriesAsync());
+  }, [dispatch]);
+
   return (
-    <ScreenComponent style={[styles.container, { paddingBottom: 80 }]}>
+    <ScreenComponent style={[styles.container, styles.screenPadding]}>
       {/* Header row */}
       <View style={styles.header}>
         <CustomText type="title">Progress</CustomText>
-        <ButtonPlusCircle onPress={() => {}} />
+        <CustomText type="subtitle">
+          {statistics.sessionsCount} sessions
+        </CustomText>
       </View>
       {/* Inner Tabs */}
       <View style={styles.innerTabs}>
         {innerTabs.map(tabTitle => (
           <RadioButton
+            key={tabTitle}
             style={styles.tabItem}
             containerStyle={styles.tabContainer}
             title={tabTitle}
@@ -43,8 +67,19 @@ export default function StatisticsScreen({ navigation }) {
         ))}
       </View>
       <ScrollView>
-        <BarChart />
-        <DonutChartComponent styleContainer={styles.infoContainerMargin} />
+        {loading && (
+          <ActivityIndicator color={COLORS.brand} style={styles.centered} />
+        )}
+        <BarChart
+          data={statistics.chartData}
+          totalLabel={statistics.totalLabel}
+          periodLabel={periodLabels[tab]}
+        />
+        <DonutChartComponent
+          data={statistics.donutData}
+          totalLabel={statistics.totalLabel}
+          styleContainer={styles.infoContainerMargin}
+        />
         {/* Progress container 1 */}
         <Container
           style={[styles.infoContainerMargin, styles.progressContainer]}
@@ -56,7 +91,7 @@ export default function StatisticsScreen({ navigation }) {
           />
           <View>
             <CustomText type="title" style={[styles.progressContainerCounter]}>
-              7
+              {statistics.streak}
             </CustomText>
             <CustomText type="subtitle">day streak</CustomText>
           </View>
@@ -72,7 +107,7 @@ export default function StatisticsScreen({ navigation }) {
               Best focus time:
             </CustomText>
             <CustomText style={styles.SumUpItemText} type="subtitle">
-              10-12
+              {statistics.bestFocusTime}
             </CustomText>
           </View>
           {/* Average session */}
@@ -86,7 +121,7 @@ export default function StatisticsScreen({ navigation }) {
               Average session:
             </CustomText>
             <CustomText style={styles.SumUpItemText} type="subtitle">
-              32 min
+              {statistics.averageSession}
             </CustomText>
           </View>
           {/*  Top category: Design */}
@@ -96,7 +131,7 @@ export default function StatisticsScreen({ navigation }) {
               Top category:
             </CustomText>
             <CustomText style={styles.SumUpItemText} type="subtitle">
-              Design
+              {statistics.topCategory}
             </CustomText>
           </View>
         </View>
@@ -108,6 +143,9 @@ export default function StatisticsScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     gap: 16,
+  },
+  screenPadding: {
+    paddingBottom: 80,
   },
   header: {
     flexDirection: 'row',

@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable } from 'react-native';
 import React from 'react';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { COLORS } from '../constants/colors';
@@ -27,4 +27,3 @@ const ButtonPlusCircle = ({ style, onPress }) => {
 };
 
 export default ButtonPlusCircle;
-const styles = StyleSheet.create({});

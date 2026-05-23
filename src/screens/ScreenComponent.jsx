@@ -8,7 +8,7 @@ export default function ScreenComponent({ children, style }) {
   const { themeColors } = useTheme();
 
   return (
-    <View style={{ flex: 1, backgroundColor: themeColors.background }}>
+    <View style={[styles.wrapper, { backgroundColor: themeColors.background }]}>
       <ImageBackground
         source={require('../assets/background.png')}
         resizeMode="cover"
@@ -28,6 +28,10 @@ export default function ScreenComponent({ children, style }) {
 }
 
 const styles = StyleSheet.create({
+  wrapper: {
+    flex: 1,
+    marginBottom: 8,
+  },
   container: {
     flex: 1,
     padding: 20,

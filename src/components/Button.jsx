@@ -17,24 +17,18 @@ export default function Button({
   const iconColor = !primary ? COLORS.brand : COLORS.white;
 
   const { animatedStyle, handlePressIn, handlePressOut } = useScaleAnimation(0.95);
+  const iconElement = icon ? (
+    <MaterialIcon name={icon} size={20} color={iconColor} />
+  ) : null;
+  const content = (
+    <>
+      {iconElement}
+      <Text style={primary ? styles.text : [styles.text, styles.secondaryText]}>
+        {title}
+      </Text>
+    </>
+  );
 
-  const Icon = () => {
-    return icon ? <MaterialIcon name={icon} size={20} color={iconColor} /> : null;
-  };
-
-  const Gradient = primary
-    ? () => (
-      <GradientContainer style={styles.gradientWrapper} innerStyle={styles.inner}>
-        <Icon />
-        <Text style={styles.text}>{title}</Text>
-      </GradientContainer>
-    )
-    : () => (
-      <View style={[styles.inner, styles.secondaryButton, { backgroundColor: themeColors.surface }]}>
-        <Icon />
-        <Text style={[styles.text, styles.secondaryText]}>{title}</Text>
-      </View>
-    );
   return (
     <Pressable 
       onPress={onPress} 
@@ -43,7 +37,24 @@ export default function Button({
       style={[styles.button, style]}
     >
       <Animated.View style={animatedStyle}>
-        <Gradient>{/* <Text style={styles.text}>{title}</Text> */}</Gradient>
+        {primary ? (
+          <GradientContainer
+            style={styles.gradientWrapper}
+            innerStyle={styles.inner}
+          >
+            {content}
+          </GradientContainer>
+        ) : (
+          <View
+            style={[
+              styles.inner,
+              styles.secondaryButton,
+              { backgroundColor: themeColors.surface },
+            ]}
+          >
+            {content}
+          </View>
+        )}
       </Animated.View>
     </Pressable>
   );
