@@ -1,10 +1,8 @@
-import { View, Text } from 'react-native';
 import React from 'react';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import SCREENS from '../constants/screens.js';
-import { HomeScreen, UI_kit } from '../screens';
+import { SettingsScreen } from '../screens';
 import TabNavigation from './TabNavigation.jsx';
-import ThemeToggle from '../components/ThemeToggle.jsx';
 import { useTheme } from '../context/ThemeContext';
 
 const Drawer = createDrawerNavigator();
@@ -17,7 +15,6 @@ export default function DrawerNavigation() {
       initialRouteName={SCREENS.TAB_ROOT}
       screenOptions={{
         headerTitle: '',
-        headerRight: () => <ThemeToggle />,
         headerTintColor: themeColors.primaryText,
         headerStyle: {
           backgroundColor: themeColors.background,
@@ -29,7 +26,7 @@ export default function DrawerNavigation() {
       }}
     >
       <Drawer.Screen name={SCREENS.TAB_ROOT} component={TabNavigation} />
-      <Drawer.Screen name={SCREENS.UI_KIT} component={UI_kit} />
+      <Drawer.Screen name={SCREENS.SETTINGS} component={SettingsScreen} />
     </Drawer.Navigator>
   );
 }

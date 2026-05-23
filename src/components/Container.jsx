@@ -1,5 +1,6 @@
 import { View, StyleSheet, Platform } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
+import shadowStyle from '../constants/shadowStyle';
 
 export default function Container({ children, style = {} }) {
   const { themeColors } = useTheme();
@@ -29,16 +30,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     borderRadius: 8,
     borderWidth: 1,
-    ...Platform.select({
-      ios: {
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.09,
-        shadowRadius: 1,
-      },
-      android: {
-        elevation: 2, // Тінь для Android
-      },
-    }),
+    ...shadowStyle,
   },
 });

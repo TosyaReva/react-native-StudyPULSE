@@ -4,9 +4,10 @@ import { useTheme } from '../context/ThemeContext';
 
 export default function CustomText({ type = 'subtitle', children, style }) {
   const { themeColors } = useTheme();
-  
+
   const dynamicColor = {
-    color: type === 'subtitle' ? themeColors.secondaryText : themeColors.primaryText,
+    color:
+      type === 'subtitle' ? themeColors.secondaryText : themeColors.primaryText,
   };
 
   return <Text style={[styles[type], dynamicColor, style]}>{children}</Text>;
@@ -32,5 +33,9 @@ const styles = StyleSheet.create({
     fontWeight: 400,
     fontSize: 18,
     color: COLORS.secondaryText,
+  },
+  text: {
+    fontSize: 16,
+    color: COLORS.primaryText,
   },
 });

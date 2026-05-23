@@ -3,6 +3,7 @@ export const COLORS = {
   secondaryText: '#676d93',
   brand: '#6d5cfd',
   white: '#FFF',
+  white2: '#F9F9FD',
   background: '#e8def8',
   gradientStart: '#de77fd',
   gradientEnd: '#347dfd',
@@ -13,5 +14,5 @@ export const COLORS = {
     primaryText: '#ffffff',
     secondaryText: '#a0a0a0',
     border: '#333333',
-  }
+  },
 };

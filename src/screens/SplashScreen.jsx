@@ -4,6 +4,7 @@ import Logo from '../components/Logo';
 import CustomText from '../components/CustomText';
 import { COLORS } from '../constants/colors';
 import Button from '../components/Button';
+import RegistrationForm from '../components/RegistrationForm';
 import SCREENS from '../constants/screens';
 import ScreenComponent from './ScreenComponent.jsx';
 
@@ -24,6 +25,7 @@ export default function SplashScreen({ navigation }) {
           Pomodoro timer for students, coders and creators.
         </CustomText>
       </View>
+      <RegistrationForm />
       <View style={styles.containerButtons}>
         <Button
           title="Get Started"

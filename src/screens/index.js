@@ -3,7 +3,8 @@ import SplashScreen from './SplashScreen';
 import CategoriesScreen from './CategoriesScreen';
 import ActiveCategoryScreen from './ActiveCategoryScreen';
 import AddNewCategoryScreen from './AddNewCategoryScreen';
-import UI_kit from './UI_kit';
+import StatisticsScreen from './StatisticsScreen';
+import SettingsScreen from './SettingsScreen';
 
 export {
   HomeScreen,
@@ -11,5 +12,6 @@ export {
   CategoriesScreen,
   ActiveCategoryScreen,
   AddNewCategoryScreen,
-  UI_kit,
+  StatisticsScreen,
+  SettingsScreen,
 };

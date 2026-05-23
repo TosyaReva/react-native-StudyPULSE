@@ -6,6 +6,8 @@ const SCREENS = {
   CATEGORY: 'CategoriesScreen',
   ACTIVE_CATEGORY: 'ActiveCategory',
   ADD_NEW_CATEGORY: 'AddNewCategory',
+  STATISTICS: 'Statistics',
+  SETTINGS: 'Settings',
   UI_KIT: 'UI_kit',
 };
 

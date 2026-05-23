@@ -5,7 +5,7 @@ import {
   fetchCategoriesAsync,
   selectCategoriesBySearch,
   selectCategoriesLoading,
-  selectCategoriesError
+  selectCategoriesError,
 } from '../redux/slices/categoriesSlice';
 
 import ButtonPlusCircle from '../components/ButtonPlusCircle.jsx';
@@ -13,7 +13,6 @@ import CategoryList from '../components/CategoryList.jsx';
 import CustomText from '../components/CustomText';
 import SearchInput from '../components/SearchInput.jsx';
 import ScreenComponent from './ScreenComponent.jsx';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 
 import { COLORS } from '../constants/colors';
 import SCREENS from '../constants/screens.js';
@@ -24,7 +23,9 @@ const CategoriesScreen = ({ navigation }) => {
 
   const loading = useSelector(selectCategoriesLoading);
   const error = useSelector(selectCategoriesError);
-  const filteredCategories = useSelector((state) => selectCategoriesBySearch(state, searchValue));
+  const filteredCategories = useSelector(state =>
+    selectCategoriesBySearch(state, searchValue),
+  );
 
   useEffect(() => {
     dispatch(fetchCategoriesAsync());

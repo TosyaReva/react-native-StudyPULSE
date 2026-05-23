@@ -1,11 +1,12 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import SCREENS from '../constants/screens.js';
-import { HomeScreen, CategoriesScreen } from '../screens';
+import { HomeScreen, CategoriesScreen, StatisticsScreen } from '../screens';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import { COLORS } from '../constants/colors.js';
 import { Platform } from 'react-native';
 import { useTheme } from '../context/ThemeContext';
+console.log(StatisticsScreen);
 
 const Tab = createBottomTabNavigator();
 
@@ -17,6 +18,7 @@ export default function TabNavigation() {
       initialRouteName={SCREENS.HOME}
       sceneContainerStyle={{ backgroundColor: 'transparent' }}
       screenOptions={({ route }) => ({
+        sceneStyle: {},
         headerShown: false,
         tabBarStyle: {
           position: 'absolute',
@@ -50,6 +52,8 @@ export default function TabNavigation() {
             iconName = 'fmd-good';
           } else if (route.name === SCREENS.CATEGORY) {
             iconName = 'commute';
+          } else if (route.name === SCREENS.STATISTICS) {
+            iconName = 'bookmark';
           }
 
           return <MaterialIcon name={iconName} size={size} color={color} />;
@@ -60,6 +64,7 @@ export default function TabNavigation() {
     >
       <Tab.Screen name={SCREENS.HOME} component={HomeScreen} />
       <Tab.Screen name={SCREENS.CATEGORY} component={CategoriesScreen} />
+      <Tab.Screen name={SCREENS.STATISTICS} component={StatisticsScreen} />
     </Tab.Navigator>
   );
 }

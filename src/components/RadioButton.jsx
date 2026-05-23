@@ -7,11 +7,17 @@ import { useScaleAnimation } from '../hooks/useScaleAnimation';
 export default function RadioButton({
   title = 'value',
   isActive,
-  onPress,
+  onPress = () => {
+    try {
+      console.log('Pressed');
+    } catch (error) {}
+  },
   children,
   style,
+  containerStyle,
 }) {
-  const { animatedStyle, handlePressIn, handlePressOut } = useScaleAnimation(0.95);
+  const { animatedStyle, handlePressIn, handlePressOut } =
+    useScaleAnimation(0.95);
 
   const Wrapper = ({ children }) =>
     isActive ? (
@@ -22,15 +28,17 @@ export default function RadioButton({
       <>{children}</>
     );
   return (
-    <Pressable 
-      onPress={() => onPress(title)} 
+    <Pressable
+      onPress={() => onPress(title)}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       style={style}
     >
       <Animated.View style={animatedStyle}>
         <Wrapper>
-          <Container style={isActive && styles.activeContainer}>
+          <Container
+            style={[isActive && styles.activeContainer, containerStyle]}
+          >
             {children}
           </Container>
         </Wrapper>
